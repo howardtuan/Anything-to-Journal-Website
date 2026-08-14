@@ -8,6 +8,9 @@ type SiteHeaderProps = {
   onSearch?: () => void;
 };
 
+const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
+const githubLabel = "View Anything-to-Journal on GitHub (opens in a new tab)";
+
 export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
@@ -55,6 +58,15 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
               <Link href="/docs">Docs</Link>
             </>
           )}
+          <a
+            className="github-link"
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={githubLabel}
+          >
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
           <button
             className="icon-button"
             type="button"
@@ -122,6 +134,16 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
               FAQ
             </a>
           )}
+          <a
+            className="github-link"
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={githubLabel}
+            onClick={() => setMenuOpen(false)}
+          >
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
         </nav>
       )}
     </header>

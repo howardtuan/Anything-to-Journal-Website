@@ -11,12 +11,16 @@ const routeFiles = new Map([
   ["/docs/overleaf", "../out/docs/overleaf/index.html"],
   ["/docs/troubleshooting", "../out/docs/troubleshooting/index.html"],
 ]);
+const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
+const productionUrl = "https://anything-to-journal-website.howardtuan.workers.dev/";
 
 test("exports complete HTML for every public route", async () => {
   for (const [route, relative] of routeFiles) {
     const html = await readFile(new URL(relative, import.meta.url), "utf8");
     assert.match(html, /Anything-to-Journal/i, route);
     assert.doesNotMatch(html, /vinext-starter|loading skeleton|Your site is taking shape/i, route);
+    assert.match(html, new RegExp(`href="${githubUrl}"`), route);
+    assert.match(html, /target="_blank" rel="noopener noreferrer"/, route);
     if (route === "/") assert.match(html, /Anything in[.]\s*Journal out[.]/i);
     if (route === "/docs/overleaf") {
       assert.match(html, /overleaf-upload[.]zip/i);
@@ -24,6 +28,36 @@ test("exports complete HTML for every public route", async () => {
       assert.match(html, /Upload Project/i);
     }
   }
+});
+
+test("ships the GitHub link in desktop and mobile shared navigation", async () => {
+  const header = await readFile(
+    new URL("../app/components/SiteHeader.tsx", import.meta.url),
+    "utf8",
+  );
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(header, /https:\/\/github[.]com\/howardtuan\/Anything-to-Journal/);
+  assert.equal(header.match(/href=\{githubUrl\}/g)?.length, 2);
+  assert.equal(header.match(/target="_blank"/g)?.length, 2);
+  assert.equal(header.match(/rel="noopener noreferrer"/g)?.length, 2);
+  assert.equal(header.match(/aria-label=\{githubLabel\}/g)?.length, 2);
+  assert.match(css, /[.]desktop-nav > [.]github-link/);
+  assert.match(css, /[.]mobile-nav [.]github-link/);
+});
+
+test("uses the production Workers origin for default social metadata", async () => {
+  const html = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
+
+  assert.match(html, new RegExp(`property="og:url" content="${productionUrl}"`));
+  assert.match(
+    html,
+    new RegExp(`property="og:image" content="${productionUrl}og[.]png"`),
+  );
+  assert.match(
+    html,
+    new RegExp(`name="twitter:image" content="${productionUrl}og[.]png"`),
+  );
 });
 
 test("keeps the deployable source frontend-only", async () => {

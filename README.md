@@ -54,13 +54,13 @@ This repository is configured for **Cloudflare Workers Static Assets**. Give Clo
 
 The committed `.node-version` pins the build to Node.js `22.16.0`. If the Cloudflare project overrides runtime versions in its build variables, set `NODE_VERSION=22.16.0` there as well.
 
-Every push to `main` now runs the build and deploy commands above. A successful first deployment is available at a URL shaped like:
+Every push to `main` now runs the build and deploy commands above. The production site for this repository is:
 
 ```text
-https://anything-to-journal-website.<your-workers-subdomain>.workers.dev
+https://anything-to-journal-website.howardtuan.workers.dev/
 ```
 
-Do not guess the middle subdomain: copy the exact `workers.dev` URL from the completed deployment in Cloudflare.
+For a fork or renamed Worker, copy the exact `workers.dev` URL from the completed deployment in Cloudflare.
 
 ### Why this repository needs no Worker source file
 
@@ -70,15 +70,15 @@ The Wrangler version is pinned in `devDependencies`, so Cloudflare uses the same
 
 ### Domain metadata
 
-`NEXT_PUBLIC_SITE_URL` is optional. Without it, the build deliberately omits absolute social-image URLs because a Workers URL contains an account-specific subdomain that the repository cannot know in advance.
+`NEXT_PUBLIC_SITE_URL` is optional. Without it, metadata defaults to the production site at `https://anything-to-journal-website.howardtuan.workers.dev/`, including the Open Graph page URL and absolute social-image URLs.
 
-After the first deployment, add the exact live `workers.dev` URL—or your custom domain—as a Cloudflare build variable and redeploy:
+To publish a fork, renamed Worker, or custom domain, set its full origin as a Cloudflare build variable and redeploy:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://anything-to-journal-website.<your-workers-subdomain>.workers.dev
+NEXT_PUBLIC_SITE_URL=https://journal.example.com
 ```
 
-Use the full origin without a trailing path. The site then emits correct absolute Open Graph and Twitter image URLs. Update `public/robots.txt` after choosing the final domain if you want an explicit sitemap URL. `public/og.png` is the original 1200×630 social preview image.
+Use the full origin without a trailing path. This overrides the default metadata base, Open Graph URL, and absolute Open Graph and Twitter image URLs. Update `public/robots.txt` after choosing a different final domain if you want an explicit sitemap URL. `public/og.png` is the original 1200×630 social preview image.
 
 ## Project structure
 

@@ -240,6 +240,16 @@ pre,
   color: var(--ink);
 }
 
+.desktop-nav > .github-link {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--blue-bright);
+}
+
+.github-link span {
+  color: var(--accent);
+}
+
 .desktop-nav .nav-cta {
   gap: 18px;
   min-width: 145px;
@@ -341,6 +351,13 @@ kbd {
   border-bottom: 1px solid var(--line);
   font-family: var(--font-mono), monospace;
   font-size: 13px;
+}
+
+.mobile-nav .github-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 2px solid var(--blue-bright);
 }
 
 .shell-grid {

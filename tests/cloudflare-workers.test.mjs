@@ -41,10 +41,16 @@ test("declares an asset-only Workers deployment", async () => {
   assert.equal(packageJson.scripts.deploy, "wrangler deploy");
 });
 
-test("does not assume a legacy Pages deployment URL", async () => {
+test("defaults metadata to production Workers and allows an environment override", async () => {
   const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
 
   assert.match(layout, /process[.]env[.]NEXT_PUBLIC_SITE_URL/);
+  assert.match(
+    layout,
+    /https:\/\/anything-to-journal-website[.]howardtuan[.]workers[.]dev\//,
+  );
+  assert.match(layout, /metadataBase:\s*siteUrl/);
+  assert.match(layout, /url:\s*siteUrl/);
   assert.doesNotMatch(layout, /CF_PAGES_URL/);
   assert.doesNotMatch(layout, /pages[.]dev/);
 });
