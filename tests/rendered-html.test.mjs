@@ -30,14 +30,17 @@ test("keeps the deployable source frontend-only", async () => {
   const packageJson = JSON.parse(
     await readFile(new URL("../package.json", import.meta.url), "utf8"),
   );
+  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
   assert.equal(packageJson.dependencies["drizzle-orm"], undefined);
   assert.equal(packageJson.devDependencies["drizzle-kit"], undefined);
   assert.equal(packageJson.devDependencies.vinext, undefined);
-  assert.equal(packageJson.devDependencies.wrangler, undefined);
+  assert.equal(packageJson.devDependencies.wrangler, "4.123.0");
   assert.equal(packageJson.devDependencies["@opennextjs/cloudflare"], undefined);
   assert.equal(packageJson.dependencies["@opennextjs/cloudflare"], undefined);
-  assert.equal(packageJson.scripts.deploy, undefined);
+  assert.equal(packageJson.scripts.deploy, "wrangler deploy");
   assert.equal(packageJson.scripts["db:generate"], undefined);
+  assert.match(layout, /process[.]env[.]NEXT_PUBLIC_SITE_URL/);
+  assert.doesNotMatch(layout, /CF_PAGES_URL|[.]pages[.]dev/);
 
   await assert.rejects(access(new URL("../app/chatgpt-auth.ts", import.meta.url)));
   await assert.rejects(access(new URL("../db", import.meta.url)));

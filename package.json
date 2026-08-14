@@ -9,10 +9,11 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/verify-pages-output.mjs",
-    "check:pages": "node scripts/verify-pages-output.mjs",
+    "build": "next build && node scripts/verify-workers-output.mjs",
+    "check:workers": "node scripts/verify-workers-output.mjs",
+    "deploy": "wrangler deploy",
     "test": "npm run build && node --test tests/*.test.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .wrangler"
   },
   "dependencies": {
     "next": "16.3.1",
@@ -31,7 +32,8 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "16.4.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.59.3"
+    "typescript-eslint": "8.59.3",
+    "wrangler": "4.123.0"
   },
   "type": "module"
 }

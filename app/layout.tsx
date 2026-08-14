@@ -18,14 +18,12 @@ const editorialSerif = Libre_Caslon_Text({
   subsets: ["latin"],
 });
 
-const siteUrl = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ??
-    process.env.CF_PAGES_URL ??
-    "https://anything-to-journal-website.pages.dev",
-);
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const siteUrl = configuredSiteUrl ? new URL(configuredSiteUrl) : undefined;
+const socialImageUrl = siteUrl ? new URL("/og.png", siteUrl) : undefined;
 
 export const metadata: Metadata = {
-  metadataBase: siteUrl,
+  ...(siteUrl ? { metadataBase: siteUrl } : {}),
   title: {
     default: "Anything-to-Journal — Anything in. Journal out.",
     template: "%s — Anything-to-Journal",
@@ -44,20 +42,24 @@ export const metadata: Metadata = {
     title: "Anything-to-Journal",
     description: "Anything in. Journal out.",
     type: "website",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Anything-to-Journal — Anything in. Journal out.",
-      },
-    ],
+    ...(socialImageUrl
+      ? {
+          images: [
+            {
+              url: socialImageUrl,
+              width: 1200,
+              height: 630,
+              alt: "Anything-to-Journal — Anything in. Journal out.",
+            },
+          ],
+        }
+      : {}),
   },
   twitter: {
-    card: "summary_large_image",
+    card: socialImageUrl ? "summary_large_image" : "summary",
     title: "Anything-to-Journal",
     description: "Anything in. Journal out.",
-    images: ["/og.png"],
+    ...(socialImageUrl ? { images: [socialImageUrl] } : {}),
   },
 };
 

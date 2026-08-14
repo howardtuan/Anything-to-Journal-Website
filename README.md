@@ -18,7 +18,7 @@ The frontend includes responsive navigation, dark mode persisted in `localStorag
 
 ## Local development
 
-Node.js is pinned to `22.16.0` in `.node-version`. Use Node 22 locally so the result matches Cloudflare Pages.
+Node.js is pinned to `22.16.0` in `.node-version`. Use Node 22 locally so the result matches Cloudflare Workers Builds.
 
 ```bash
 npm ci
@@ -34,50 +34,51 @@ npm run lint
 npm test
 ```
 
-`npm run build` runs `next build` and then verifies that the complete static Pages artifact exists. `npm test` additionally checks every public route and the deployment contract. The publishing artifact is written to `out/`; it is intentionally ignored by Git because Cloudflare rebuilds it from source.
+`npm run build` runs `next build` and then verifies that the complete static Workers asset bundle exists. `npm test` additionally checks every public route and the deployment contract. The publishing artifact is written to `out/`; it is intentionally ignored by Git because Cloudflare rebuilds it from source.
 
-## Cloudflare Pages: connect this repository
+## Cloudflare Workers: connect this repository
 
-This repository is configured for **Cloudflare Pages static hosting**, not a Cloudflare Worker. In the Cloudflare dashboard:
+This repository is configured for **Cloudflare Workers Static Assets**. Give Cloudflare the repository itself; do not upload `out/`, `.next/`, `node_modules/`, or a ZIP file.
 
 1. Open **Workers & Pages** and select **Create application**.
-2. Select the **Pages** tab, then **Import an existing Git repository**.
-3. Connect this repository and use these build settings:
+2. Select **Import a repository** and connect this Git repository.
+3. Make sure the project name is exactly `anything-to-journal-website`, matching `name` in `wrangler.jsonc`.
+4. Use these build settings:
 
 | Setting | Value |
 | --- | --- |
 | Production branch | `main` |
-| Framework preset | `Next.js (Static HTML Export)` |
 | Root directory | leave blank (repository root) |
 | Build command | `npm run build` |
-| Build output directory | `out` |
-| Deploy command | leave blank / not applicable |
+| Deploy command | `npx wrangler deploy` |
 
-The committed `.node-version` pins the build to Node.js `22.16.0`. If your Pages project overrides runtime versions in the dashboard, set `NODE_VERSION=22.16.0` there as well.
+The committed `.node-version` pins the build to Node.js `22.16.0`. If the Cloudflare project overrides runtime versions in its build variables, set `NODE_VERSION=22.16.0` there as well.
 
-If the setup screen requires a **Deploy command**, or a build log says `Detected Project Settings: Worker Name`, you selected a Workers build instead of Pages. Return to **Create application → Pages → Import an existing Git repository**. Do not enter `npx wrangler deploy`.
+Every push to `main` now runs the build and deploy commands above. A successful first deployment is available at a URL shaped like:
 
-### Why `npx wrangler deploy` is wrong here
+```text
+https://anything-to-journal-website.<your-workers-subdomain>.workers.dev
+```
 
-`wrangler deploy` is a Workers command. Without an explicit Pages configuration, it auto-detects Next.js and tries to migrate the project to OpenNext. This site uses `output: "export"`, so it intentionally has no `.next/standalone` server bundle for OpenNext to consume.
+Do not guess the middle subdomain: copy the exact `workers.dev` URL from the completed deployment in Cloudflare.
 
-`wrangler.jsonc` declares `pages_build_output_dir: "./out"`, which identifies this as a Pages project and makes an accidental `wrangler deploy` stop with a Pages-specific error instead of modifying the repository. Git-connected Pages deployments need no Wrangler deploy command: Cloudflare runs `npm run build` and publishes `out/` automatically after each push.
+### Why this repository needs no Worker source file
 
-For an optional manual Pages upload, the command is `npx wrangler pages deploy out`—note the required `pages` subcommand. Do not use this command for the normal Git-connected workflow.
+Next.js uses `output: "export"` to generate the complete frontend in `out/`. The committed `wrangler.jsonc` points `assets.directory` at that folder, so `wrangler deploy` publishes it as an asset-only Worker. There is intentionally no `main`, server entry point, API route, OpenNext adapter, or `.next/standalone` bundle.
+
+The Wrangler version is pinned in `devDependencies`, so Cloudflare uses the same deployment behavior as local verification. `npx wrangler deploy` resolves that committed version after `npm install` instead of relying on an unpinned global installation.
 
 ### Domain metadata
 
-Cloudflare Pages automatically provides `CF_PAGES_URL` during its build, and the site uses it for absolute social metadata. To force a custom production domain instead, set:
+`NEXT_PUBLIC_SITE_URL` is optional. Without it, the build deliberately omits absolute social-image URLs because a Workers URL contains an account-specific subdomain that the repository cannot know in advance.
+
+After the first deployment, add the exact live `workers.dev` URL—or your custom domain—as a Cloudflare build variable and redeploy:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://journal.example npm run build
+NEXT_PUBLIC_SITE_URL=https://anything-to-journal-website.<your-workers-subdomain>.workers.dev
 ```
 
-Update `public/robots.txt` after choosing the final domain if you want an explicit sitemap URL. `public/og.png` is the original 1200×630 social preview image.
-
-### Pages response headers
-
-`public/_headers` is copied into `out/_headers` during the build. Cloudflare Pages applies the declared clickjacking, MIME-sniffing, referrer, browser-permission, opener-isolation, and immutable hashed-asset cache policies when it serves the static files.
+Use the full origin without a trailing path. The site then emits correct absolute Open Graph and Twitter image URLs. Update `public/robots.txt` after choosing the final domain if you want an explicit sitemap URL. `public/og.png` is the original 1200×630 social preview image.
 
 ## Project structure
 
@@ -89,16 +90,16 @@ app/
 ├── layout.tsx           # metadata, fonts, and root shell
 └── page.tsx             # landing page
 public/
-├── _headers            # Cloudflare Pages security and asset-cache policy
+├── _headers            # Workers security and asset-cache rules
 ├── llms.txt
 ├── og.png
 └── robots.txt
 scripts/
-└── verify-pages-output.mjs
+└── verify-workers-output.mjs
 tests/
-├── cloudflare-pages.test.mjs
+├── cloudflare-workers.test.mjs
 └── rendered-html.test.mjs
-wrangler.jsonc          # identifies out/ as a Pages artifact; no Worker entry
+wrangler.jsonc          # deploys out/ through Workers Static Assets; no main entry
 ```
 
 ## License
