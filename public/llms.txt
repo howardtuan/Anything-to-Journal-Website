@@ -1,0 +1,23 @@
+# Anything-to-Journal
+
+Anything-to-Journal is a folder-first agent skill that turns source material into an editable journal manuscript.
+
+## Documentation
+
+- /docs — Introduction
+- /docs/getting-started — Complete first-run workflow
+- /docs/folder-contract — Source workspace contract
+- /docs/templates — Draft mode and journal-template mode
+- /docs/overleaf — Upload the generated ZIP to Overleaf
+- /docs/troubleshooting — Compile, citation, figure, and evidence fixes
+
+## Essential workflow
+
+1. Create a new folder dedicated to one manuscript.
+2. Put every relevant source in that folder.
+3. Open the agent from inside the folder and invoke Anything-to-Journal.
+4. Confirm a flexible journal draft or a specific journal template.
+5. Review the generated manuscript and generation report.
+6. Upload `journal-output/submission/overleaf-upload.zip` with Overleaf: New Project > Upload Project.
+
+The generated ZIP has `main.tex` at its root.
