@@ -34,11 +34,17 @@ test("keeps the deployable source frontend-only", async () => {
   assert.equal(packageJson.devDependencies["drizzle-kit"], undefined);
   assert.equal(packageJson.devDependencies.vinext, undefined);
   assert.equal(packageJson.devDependencies.wrangler, undefined);
+  assert.equal(packageJson.devDependencies["@opennextjs/cloudflare"], undefined);
+  assert.equal(packageJson.dependencies["@opennextjs/cloudflare"], undefined);
+  assert.equal(packageJson.scripts.deploy, undefined);
   assert.equal(packageJson.scripts["db:generate"], undefined);
 
   await assert.rejects(access(new URL("../app/chatgpt-auth.ts", import.meta.url)));
   await assert.rejects(access(new URL("../db", import.meta.url)));
   await assert.rejects(access(new URL("../examples/d1", import.meta.url)));
   await assert.rejects(access(new URL("../worker", import.meta.url)));
+  await assert.rejects(access(new URL("../functions", import.meta.url)));
+  await assert.rejects(access(new URL("../open-next.config.ts", import.meta.url)));
+  await assert.rejects(access(new URL("../.open-next", import.meta.url)));
   await assert.rejects(access(new URL("../.openai", import.meta.url)));
 });

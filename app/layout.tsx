@@ -19,7 +19,9 @@ const editorialSerif = Libre_Caslon_Text({
 });
 
 const siteUrl = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.CF_PAGES_URL ??
+    "https://anything-to-journal-website.pages.dev",
 );
 
 export const metadata: Metadata = {
