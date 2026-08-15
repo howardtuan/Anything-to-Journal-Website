@@ -13,6 +13,8 @@ const routeFiles = new Map([
 ]);
 const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
 const productionUrl = "https://anything-to-journal-website.howardtuan.workers.dev/";
+const installCommand = "npx anything-to-journal@latest install";
+const updateCommand = "npx anything-to-journal@latest update";
 
 test("exports complete HTML for every public route", async () => {
   for (const [route, relative] of routeFiles) {
@@ -44,6 +46,22 @@ test("ships the GitHub link in desktop and mobile shared navigation", async () =
   assert.equal(header.match(/aria-label=\{githubLabel\}/g)?.length, 2);
   assert.match(css, /[.]desktop-nav > [.]github-link/);
   assert.match(css, /[.]mobile-nav [.]github-link/);
+});
+
+test("publishes copyable npx install and update instructions", async () => {
+  const home = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
+  const gettingStarted = await readFile(
+    new URL("../out/docs/getting-started/index.html", import.meta.url),
+    "utf8",
+  );
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  for (const [surface, html] of [["home", home], ["getting started", gettingStarted]]) {
+    assert.match(html, new RegExp(installCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
+    assert.match(html, new RegExp(updateCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
+  }
+  assert.match(source, /<CopyButton value=\{installCommand\} label="Copy install"/);
+  assert.match(source, /<CopyButton value=\{updateCommand\} label="Copy update"/);
 });
 
 test("uses the production Workers origin for default social metadata", async () => {

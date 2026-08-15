@@ -16,6 +16,15 @@ The site contains no database, API routes, user accounts, analytics, or server-s
 
 The frontend includes responsive navigation, dark mode persisted in `localStorage`, a mobile docs browser, Cmd/Ctrl+K client-side search, copy buttons, an interactive workflow demo, and accessible FAQ accordions.
 
+The landing page and Getting Started guide expose the npm CLI used to install and update the Agent Skill:
+
+```bash
+npx anything-to-journal@latest install
+npx anything-to-journal@latest update
+```
+
+These commands require Node.js 18 or newer and become available after the matching `anything-to-journal` package release is published to npm.
+
 ## Local development
 
 Node.js is pinned to `22.16.0` in `.node-version`. Use Node 22 locally so the result matches Cloudflare Workers Builds.

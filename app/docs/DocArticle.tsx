@@ -9,6 +9,9 @@ Before opening any source content, ask me whether I want:
 2. a specific journal template.
 After I answer, read and classify every source material.`;
 
+const installCommand = "npx anything-to-journal@latest install";
+const updateCommand = "npx anything-to-journal@latest update";
+
 const sourceTree = `my-research/
 ├── README.md
 ├── notes/
@@ -227,30 +230,43 @@ function GettingStarted() {
       </p>
 
       <Section id="before-you-start" title="Before you start">
-        <p>You need an agent that can access local files and the Anything-to-Journal skill. You do not need LaTeX or Overleaf to begin.</p>
+        <p>You need Node.js 18 or newer and an agent that can access local files. You do not need LaTeX or Overleaf to begin.</p>
         <Callout type="warning" title="Use a new folder">
           Do not point the skill at your Desktop, Downloads, home directory, or a broad
           multi-project archive. A dedicated folder keeps the evidence boundary clear.
         </Callout>
       </Section>
 
-      <Section id="create-workspace" title="1. Create the workspace">
+      <Section id="install-skill" title="1. Install the skill">
+        <p>Run the npx installer once. It places the latest published release in <code>$CODEX_HOME/skills</code>, or <code>~/.codex/skills</code> when <code>CODEX_HOME</code> is unset.</p>
+        <CodeBlock value={installCommand} filename="TERMINAL / FIRST INSTALL" />
+        <Callout type="success" title="Existing installations are protected">
+          The install command refuses to overwrite an existing destination. If the skill
+          is already installed, use the update command instead.
+        </Callout>
+        <h3>Update later</h3>
+        <p>Use <code>@latest</code> to fetch the newest npm release. The updater verifies the installed skill, stages the replacement, and swaps it into place atomically.</p>
+        <CodeBlock value={updateCommand} filename="TERMINAL / UPDATE" />
+        <p>For a repository-local installation, append <code>--repo /absolute/path/to/repository</code>. Run <code>npx anything-to-journal@latest --help</code> for explicit destination and dry-run options.</p>
+      </Section>
+
+      <Section id="create-workspace" title="2. Create the workspace">
         <p>Create a fresh folder with a specific, stable project name. This folder is both the input boundary and the place where the agent will work.</p>
         <CodeBlock value={`mkdir coastal-risk-manuscript\ncd coastal-risk-manuscript`} filename="TERMINAL" />
       </Section>
 
-      <Section id="add-material" title="2. Add source material">
+      <Section id="add-material" title="3. Add source material">
         <p>Copy in everything that can support the paper. Keep original filenames when they carry meaning, and add a short README if the dataset or notation needs explanation.</p>
         <CodeBlock value={sourceTree} filename="EXAMPLE WORKSPACE" />
         <p>Incomplete material is allowed. The workflow should report evidence gaps rather than filling them with unsupported claims.</p>
       </Section>
 
-      <Section id="open-agent" title="3. Open your agent">
+      <Section id="open-agent" title="4. Open your agent">
         <p>Open your coding agent from inside the new folder. Then give it a direct instruction to invoke the skill and ask the required mode question before inspection.</p>
         <CodeBlock value={firstPrompt} filename="FIRST PROMPT" />
       </Section>
 
-      <Section id="confirm-mode" title="4. Confirm the mode">
+      <Section id="confirm-mode" title="5. Confirm the mode">
         <p>The agent must pause before opening source content and ask which of these two modes you want:</p>
         <div className="mode-doc-grid">
           <div><span>A / DRAFT</span><h3>Flexible journal draft</h3><p>Use when you want a strong manuscript structure before choosing a venue.</p></div>
@@ -259,7 +275,7 @@ function GettingStarted() {
         <p>If you choose template mode, identify the target journal and place its official files inside <code>journal-template/</code>.</p>
       </Section>
 
-      <Section id="review-output" title="5. Review the output">
+      <Section id="review-output" title="6. Review the output">
         <p>When generation finishes, review the report first, then open the compiled PDF. Check unresolved evidence notes before spending time on typography.</p>
         <CodeBlock value={outputTree} filename="EXPECTED OUTPUT" />
         <ul className="check-list">

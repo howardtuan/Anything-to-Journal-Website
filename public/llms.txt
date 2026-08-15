@@ -2,6 +2,14 @@
 
 Anything-to-Journal is a folder-first agent skill that turns source material into an editable journal manuscript.
 
+## Install and update
+
+Requires Node.js 18 or newer.
+
+- Install: `npx anything-to-journal@latest install`
+- Update: `npx anything-to-journal@latest update`
+- Options: `npx anything-to-journal@latest --help`
+
 ## Documentation
 
 - /docs — Introduction

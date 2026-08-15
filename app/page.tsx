@@ -1,7 +1,11 @@
 import Link from "next/link";
+import { CopyButton } from "./components/CopyButton";
 import { HomeDemo } from "./components/HomeDemo";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
+
+const installCommand = "npx anything-to-journal@latest install";
+const updateCommand = "npx anything-to-journal@latest update";
 
 const workflow = [
   {
@@ -40,6 +44,11 @@ const faqs = [
     question: "Do I need to organize everything first?",
     answer:
       "No. Clear names help, but the skill is designed to inspect mixed material. Keep the folder dedicated to one manuscript and exclude secrets or unrelated files.",
+  },
+  {
+    question: "How do I update the skill?",
+    answer:
+      "Run npx anything-to-journal@latest update. The updater verifies the existing skill, stages the newest published release, and replaces the old copy safely.",
   },
   {
     question: "What is the difference between draft and template mode?",
@@ -103,9 +112,40 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="install-section section-rule" id="install">
+        <div className="section-heading">
+          <span className="section-index">01 / INSTALL</span>
+          <div>
+            <h2>One command to begin.</h2>
+            <p>Install once with npx. Run the update command whenever a new npm release is published.</p>
+          </div>
+        </div>
+        <div className="install-grid">
+          <article>
+            <div className="install-card-meta"><span>FIRST INSTALL</span><i>01</i></div>
+            <h3>Install the latest release.</h3>
+            <p>Copies the skill into your Codex skills directory without touching an existing installation.</p>
+            <div className="install-command">
+              <code>{installCommand}</code>
+              <CopyButton value={installCommand} label="Copy install" />
+            </div>
+          </article>
+          <article>
+            <div className="install-card-meta"><span>FUTURE UPDATES</span><i>02</i></div>
+            <h3>Update through the same CLI.</h3>
+            <p>Verifies the installed skill, stages the newest release, and replaces the old copy atomically.</p>
+            <div className="install-command">
+              <code>{updateCommand}</code>
+              <CopyButton value={updateCommand} label="Copy update" />
+            </div>
+          </article>
+        </div>
+        <p className="install-note">Requires Node.js 18 or newer. The default target is <code>~/.codex/skills/anything-to-journal</code>.</p>
+      </section>
+
       <section className="demo-section section-rule">
         <div className="section-heading">
-          <span className="section-index">01 / WORKSPACE</span>
+          <span className="section-index">02 / WORKSPACE</span>
           <div>
             <h2>One folder is the interface.</h2>
             <p>No form builder. No import ritual. Keep the full research context together.</p>
@@ -116,7 +156,7 @@ export default function Home() {
 
       <section className="workflow-section section-rule" id="workflow">
         <div className="section-heading">
-          <span className="section-index">02 / WORKFLOW</span>
+          <span className="section-index">03 / WORKFLOW</span>
           <div>
             <h2>From source pile to journal.</h2>
             <p>Four explicit steps. One decision before the source content is read.</p>
@@ -141,7 +181,7 @@ export default function Home() {
 
       <section className="decision-section section-rule" id="templates">
         <div className="decision-intro">
-          <span className="section-index">03 / MODE GATE</span>
+          <span className="section-index">04 / MODE GATE</span>
           <h2>
             The agent asks
             <br />
@@ -189,7 +229,7 @@ export default function Home() {
 
       <section className="output-section section-rule" id="output">
         <div className="output-copy">
-          <span className="section-index">04 / OUTPUT</span>
+          <span className="section-index">05 / OUTPUT</span>
           <h2>A manuscript you still own.</h2>
           <p>
             Every major section stays separate and legible. Figures remain replaceable.
@@ -238,7 +278,7 @@ export default function Home() {
 
       <section className="overleaf-band">
         <div>
-          <span className="section-index">05 / HANDOFF</span>
+          <span className="section-index">06 / HANDOFF</span>
           <h2>
             One ZIP.
             <br />
@@ -257,7 +297,7 @@ export default function Home() {
 
       <section className="faq-section section-rule" id="faq">
         <div className="faq-heading">
-          <span className="section-index">06 / FAQ</span>
+          <span className="section-index">07 / FAQ</span>
           <h2>Questions, resolved.</h2>
         </div>
         <div className="faq-list">
