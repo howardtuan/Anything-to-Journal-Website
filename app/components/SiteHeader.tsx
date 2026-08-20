@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
@@ -40,7 +41,7 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
       <div className="header-inner">
         <Link className="brand" href="/" aria-label={zh ? "Anything-to-Journal 首頁" : "Anything-to-Journal home"}>
           <span className="brand-mark" aria-hidden="true">
-            <span>J</span>
+            <Image src="/brand-mark.svg" alt="" width={28} height={28} priority />
           </span>
           <span className="brand-word">anything-to-journal</span>
         </Link>

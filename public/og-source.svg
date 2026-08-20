@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#171717" opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#f7f7f5"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <g transform="translate(78 62) scale(.78)">
+    <rect width="64" height="64" rx="15" fill="#0a0a0a"/>
+    <path d="M16 11h24l9 9v29a5 5 0 0 1-5 5H16a5 5 0 0 1-5-5V16a5 5 0 0 1 5-5Z" fill="#fff"/>
+    <path d="M40 11v9h9" fill="#ff6a00"/>
+    <path d="M38 24v14c0 6-3 9-9 9-4 0-7-2-8-6" fill="none" stroke="#0a0a0a" stroke-linecap="round" stroke-width="4.5"/>
+  </g>
+  <text x="146" y="101" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">anything-to-journal</text>
+  <circle cx="946" cy="86" r="6" fill="#ff6a00"/>
+  <text x="967" y="93" fill="#686864" font-family="Arial, Helvetica, sans-serif" font-size="17" letter-spacing="3">AGENT SKILL</text>
+
+  <line x1="78" y1="145" x2="1122" y2="145" stroke="#171717" stroke-opacity="0.12"/>
+
+  <text x="78" y="300" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="700" letter-spacing="-6">Anything in.</text>
+  <text x="78" y="422" fill="#ff6a00" font-family="Georgia, Times, serif" font-size="112" letter-spacing="-5">Journal</text>
+  <text x="443" y="422" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="700" letter-spacing="-6"> out.</text>
+
+  <text x="82" y="510" fill="#686864" font-family="Arial, Helvetica, sans-serif" font-size="26">Research sources → editable LaTeX → journal-ready manuscript</text>
+
+  <g transform="translate(876 244)">
+    <rect width="246" height="278" rx="22" fill="#0a0a0a"/>
+    <path d="M52 38h104l38 38v155a14 14 0 0 1-14 14H52a14 14 0 0 1-14-14V52a14 14 0 0 1 14-14Z" fill="#fff"/>
+    <path d="M156 38v38h38" fill="#ff6a00"/>
+    <path d="M145 96v67c0 31-16 47-47 47-22 0-38-11-44-31" fill="none" stroke="#0a0a0a" stroke-linecap="round" stroke-width="15"/>
+  </g>
+
+  <rect x="0" y="616" width="1200" height="14" fill="#ff6a00"/>
+</svg>

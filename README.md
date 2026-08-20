@@ -2,7 +2,7 @@
 
 Pure frontend product and documentation site for Anything-to-Journal.
 
-The site contains no database, API routes, user accounts, analytics, or server-side application state. It uses a quiet, one-accent product layout built with React and a Next.js static export.
+The site contains no database, API routes, user accounts, analytics, or server-side application state. It uses a quiet orange, white, and black product layout with a custom document-and-J brand mark, built with React and a Next.js static export.
 
 ## Routes
 
@@ -103,7 +103,9 @@ app/
 └── page.tsx             # landing page
 public/
 ├── _headers            # Workers security and asset-cache rules
+├── brand-mark.svg      # custom navigation brand mark
 ├── llms.txt
+├── og-source.svg       # editable source for the social preview
 ├── og.png
 └── robots.txt
 scripts/
