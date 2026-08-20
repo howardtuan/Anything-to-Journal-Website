@@ -25,7 +25,7 @@ npx anything-to-journal@latest install
 npx anything-to-journal@latest update
 ```
 
-These commands require Node.js 18 or newer and become available after the matching `anything-to-journal` package release is published to npm.
+These commands require Node.js 18 or newer and use the matching `anything-to-journal` version available from npm.
 
 ## Local development
 
@@ -38,14 +38,14 @@ npm run dev
 
 Open <http://localhost:3000>.
 
-## Verify before publishing
+## Verify before deployment
 
 ```bash
 npm run lint
 npm test
 ```
 
-`npm run build` runs `next build` and then verifies that the complete static Workers asset bundle exists. `npm test` additionally checks every public route and the deployment contract. The publishing artifact is written to `out/`; it is intentionally ignored by Git because Cloudflare rebuilds it from source.
+`npm run build` runs `next build` and then verifies that the complete static Workers asset bundle exists. `npm test` additionally checks every public route and the deployment contract. The deployment artifact is written to `out/`; it is intentionally ignored by Git because Cloudflare rebuilds it from source.
 
 ## Cloudflare Workers: connect this repository
 
@@ -83,7 +83,7 @@ The Wrangler version is pinned in `devDependencies`, so Cloudflare uses the same
 
 `NEXT_PUBLIC_SITE_URL` is optional. Without it, metadata defaults to the production site at `https://anything-to-journal-website.howardtuan.workers.dev/`, including the Open Graph page URL and absolute social-image URLs.
 
-To publish a fork, renamed Worker, or custom domain, set its full origin as a Cloudflare build variable and redeploy:
+To deploy a fork, renamed Worker, or custom domain, set its full origin as a Cloudflare build variable and redeploy:
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://journal.example.com
