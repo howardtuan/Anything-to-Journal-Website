@@ -41,4 +41,4 @@ The generated ZIP has `main.tex` at its root.
 - Detects external edits made by Codex and protects unsaved browser changes from being overwritten.
 - The same localhost URL works in Codex Desktop and a regular browser.
 
-The landing page includes an English / Traditional Chinese language switch. Documentation routes remain in English.
+The complete site includes an English / Traditional Chinese language switch. The selected language remains active across the landing page and every documentation route.

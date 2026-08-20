@@ -1552,6 +1552,7 @@ html[lang="zh-TW"] .hero-title {
 }
 
 .workspace-app-bar button:hover { border-color: var(--demo-red); color: var(--demo-red); }
+.workspace-app-bar button:disabled { border-color: var(--demo-faint); color: var(--demo-faint); cursor: wait; }
 
 .workspace-tabs {
   display: grid;
@@ -1995,6 +1996,22 @@ html[lang="zh-TW"] .hero-title {
 .search-empty { padding: 35px 18px; color: var(--muted); font-size: 12px; text-align: center; }
 .search-footer { display: flex; gap: 18px; padding: 10px 14px; border-top: 1px solid var(--line); color: var(--faint); font-family: var(--font-mono), monospace; font-size: 7px; letter-spacing: .07em; }
 
+.not-found-site { min-height: 100svh; background: var(--bg); }
+.not-found-content {
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - 64px);
+  width: min(calc(100% - 32px), 1460px);
+  margin: 0 auto;
+  padding: clamp(72px, 10vw, 150px);
+  border-right: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line-strong);
+}
+.not-found-content > span { color: var(--accent); font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: .14em; }
+.not-found-content h1 { max-width: 900px; margin: 28px 0 24px; font-family: var(--font-serif), Georgia, serif; font-size: clamp(54px, 8vw, 112px); font-weight: 400; letter-spacing: -.055em; line-height: .92; }
+.not-found-content p { max-width: 620px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+.not-found-content > div { display: flex; gap: 28px; align-items: center; margin-top: 42px; }
+
 @media (max-width: 1120px) {
   .workflow-grid { grid-template-columns: 1fr 1fr; }
   .decision-section, .output-section, .workspace-section { grid-template-columns: 1fr; }
@@ -2110,6 +2127,8 @@ html[lang="zh-TW"] .hero-title {
   .doc-pagination .next { text-align: left; }
   .search-overlay { padding-top: 75px; }
   .search-results small { display: none; }
+  .not-found-content { width: calc(100% - 16px); padding: 70px 22px; }
+  .not-found-content > div { align-items: flex-start; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {

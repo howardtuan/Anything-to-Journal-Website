@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { HomeLanguage } from "../homeCopy";
 
 type WorkspaceTab = "pdf" | "latex";
@@ -20,7 +20,19 @@ const codeLines = [
 
 export function WorkspaceShowcase({ language }: { language: HomeLanguage }) {
   const [tab, setTab] = useState<WorkspaceTab>("pdf");
+  const [compiling, setCompiling] = useState(false);
+  const compileTimer = useRef<number | null>(null);
   const zh = language === "zh-TW";
+
+  useEffect(() => () => {
+    if (compileTimer.current !== null) window.clearTimeout(compileTimer.current);
+  }, []);
+
+  function recompile() {
+    setCompiling(true);
+    if (compileTimer.current !== null) window.clearTimeout(compileTimer.current);
+    compileTimer.current = window.setTimeout(() => setCompiling(false), 850);
+  }
 
   return (
     <div className="workspace-showcase">
@@ -39,8 +51,8 @@ export function WorkspaceShowcase({ language }: { language: HomeLanguage }) {
           <strong>manuscript.tex</strong>
           <span>journal-output / manuscript</span>
         </div>
-        <span className="workspace-saved"><i />{zh ? "已儲存" : "SAVED"}</span>
-        <button type="button">↻ {zh ? "重新編譯" : "RECOMPILE"}</button>
+        <span className="workspace-saved"><i />{compiling ? (zh ? "編譯中" : "COMPILING") : (zh ? "已儲存" : "SAVED")}</span>
+        <button type="button" onClick={recompile} disabled={compiling}>↻ {compiling ? (zh ? "編譯中…" : "COMPILING…") : (zh ? "重新編譯" : "RECOMPILE")}</button>
       </div>
 
       <div className="workspace-tabs" role="tablist" aria-label={zh ? "論文工作區分頁" : "Manuscript workspace tabs"}>
@@ -88,7 +100,7 @@ export function WorkspaceShowcase({ language }: { language: HomeLanguage }) {
 
       <div className="workspace-status-bar">
         <span><i className="sync-dot" />{zh ? "監看外部變更" : "WATCHING EXTERNAL CHANGES"}</span>
-        <span>{zh ? "PDF 已同步" : "PDF IN SYNC"}</span>
+        <span>{compiling ? (zh ? "正在編譯 PDF" : "COMPILING PDF") : (zh ? "PDF 已同步" : "PDF IN SYNC")}</span>
       </div>
     </div>
   );

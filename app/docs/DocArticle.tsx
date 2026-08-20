@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { ReactNode } from "react";
-import { CopyButton } from "../components/CopyButton";
-import { docsPages } from "./docsData";
+import { useLanguage } from "../components/LanguageProvider";
+import { ArticleFrame, Callout, CodeBlock, Section } from "./DocComponents";
+import { ZhDocArticle } from "./ZhDocArticle";
 
 const firstPrompt = `Use the Anything-to-Journal skill in this folder.
 Before opening any source content, ask me whether I want:
@@ -56,6 +58,9 @@ const templateTree = `journal-template/
 └── template-notes.md           # optional`;
 
 export function DocArticle({ slug }: { slug: string }) {
+  const { language } = useLanguage();
+  if (language === "zh-TW") return <ZhDocArticle slug={slug} />;
+
   switch (slug) {
     case "getting-started":
       return <GettingStarted />;
@@ -70,83 +75,6 @@ export function DocArticle({ slug }: { slug: string }) {
     default:
       return <Introduction />;
   }
-}
-
-function ArticleFrame({ slug, children }: { slug: string; children: ReactNode }) {
-  const page = docsPages.find((item) => item.href === (slug === "introduction" ? "/docs" : `/docs/${slug}`)) ?? docsPages[0];
-  const pageIndex = docsPages.indexOf(page);
-  const previous = docsPages[pageIndex - 1];
-  const next = docsPages[pageIndex + 1];
-  const outline = `# ${page.title}\n\n${page.description}\n\n${page.headings.map((heading) => `## ${heading.label}`).join("\n\n")}`;
-
-  return (
-    <article className="doc-article">
-      <div className="doc-breadcrumb">
-        <Link href="/docs">DOCS</Link>
-        <span>/</span>
-        <span>{page.group.toUpperCase()}</span>
-        <i>{page.index}</i>
-      </div>
-      <header className="doc-header">
-        <div>
-          <h1>{page.title}</h1>
-          <p>{page.description}</p>
-        </div>
-        <CopyButton value={outline} label="Copy outline" />
-      </header>
-      <div className="doc-status-row">
-        <span><i className="green-dot" /> DOCUMENTED</span>
-        <span>UPDATED AUG 2026</span>
-      </div>
-
-      <div className="doc-prose">{children}</div>
-
-      <nav className="doc-pagination" aria-label="Documentation pagination">
-        {previous ? (
-          <Link href={previous.href}>
-            <span>← PREVIOUS</span>
-            <strong>{previous.title}</strong>
-          </Link>
-        ) : <span />}
-        {next && (
-          <Link href={next.href} className="next">
-            <span>NEXT →</span>
-            <strong>{next.title}</strong>
-          </Link>
-        )}
-      </nav>
-    </article>
-  );
-}
-
-function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
-  return (
-    <section id={id} className="doc-section">
-      <h2>{title}<a href={`#${id}`} aria-label={`Link to ${title}`}>#</a></h2>
-      {children}
-    </section>
-  );
-}
-
-function CodeBlock({ value, filename }: { value: string; filename?: string }) {
-  return (
-    <div className="code-block">
-      <div className="code-header">
-        <span>{filename ?? "TEXT"}</span>
-        <CopyButton value={value} />
-      </div>
-      <pre><code>{value}</code></pre>
-    </div>
-  );
-}
-
-function Callout({ type = "note", title, children }: { type?: "note" | "warning" | "success"; title: string; children: ReactNode }) {
-  return (
-    <aside className={`doc-callout ${type}`}>
-      <span>{type === "warning" ? "!" : type === "success" ? "✓" : "i"}</span>
-      <div><strong>{title}</strong><p>{children}</p></div>
-    </aside>
-  );
 }
 
 function Introduction() {

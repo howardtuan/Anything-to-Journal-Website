@@ -1,36 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { HomeDemo } from "./components/HomeDemo";
 import { InstallSwitcher } from "./components/InstallSwitcher";
+import { useLanguage } from "./components/LanguageProvider";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
 import { WorkspaceShowcase } from "./components/WorkspaceShowcase";
-import { homeCopy, type HomeLanguage } from "./homeCopy";
+import { homeCopy } from "./homeCopy";
 
 export default function Home() {
-  const [language, setLanguage] = useState<HomeLanguage>("en");
+  const { language } = useLanguage();
   const copy = homeCopy[language];
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem("atj-language");
-    const nextLanguage: HomeLanguage = saved === "zh-TW" ? "zh-TW" : "en";
-    document.documentElement.lang = nextLanguage;
-    const frame = window.requestAnimationFrame(() => setLanguage(nextLanguage));
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
-  function toggleLanguage() {
-    const nextLanguage: HomeLanguage = language === "en" ? "zh-TW" : "en";
-    setLanguage(nextLanguage);
-    document.documentElement.lang = nextLanguage;
-    window.localStorage.setItem("atj-language", nextLanguage);
-  }
 
   return (
     <main id="top">
-      <SiteHeader language={language} onLanguageToggle={toggleLanguage} />
+      <SiteHeader />
 
       <section className="hero shell-grid">
         <div className="rail-label rail-left" aria-hidden="true">{copy.hero.leftRail}</div>

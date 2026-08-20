@@ -46,7 +46,7 @@ export function InstallSwitcher({ language }: { language: HomeLanguage }) {
           aria-controls="install-panel"
           onClick={() => choose("you")}
         >
-          For you
+          {zh ? "給你" : "For you"}
         </button>
         <button
           className={audience === "agent" ? "active" : ""}
@@ -57,7 +57,7 @@ export function InstallSwitcher({ language }: { language: HomeLanguage }) {
           aria-controls="install-panel"
           onClick={() => choose("agent")}
         >
-          For your agent
+          {zh ? "給你的 Agent" : "For your agent"}
         </button>
       </div>
 
@@ -98,7 +98,7 @@ export function InstallSwitcher({ language }: { language: HomeLanguage }) {
               aria-label={zh ? "複製給 Agent 的安裝提示" : "Copy agent install prompt"}
             >
               <span className="install-action-symbol agent" aria-hidden="true">✦</span>
-              <span>{copied === "prompt" ? (zh ? "已複製 Prompt" : "Prompt copied") : "Copy Prompt"}</span>
+              <span>{copied === "prompt" ? (zh ? "已複製 Prompt" : "Prompt copied") : (zh ? "複製 Prompt" : "Copy Prompt")}</span>
               <CopyMark copied={copied === "prompt"} />
             </button>
             <div className="install-switcher-meta agent-note">

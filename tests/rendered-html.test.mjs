@@ -4,6 +4,7 @@ import test from "node:test";
 
 const routeFiles = new Map([
   ["/", "../out/index.html"],
+  ["/404", "../out/404.html"],
   ["/docs", "../out/docs/index.html"],
   ["/docs/getting-started", "../out/docs/getting-started/index.html"],
   ["/docs/folder-contract", "../out/docs/folder-contract/index.html"],
@@ -64,10 +65,59 @@ test("publishes copyable npx install and update instructions", async () => {
     assert.match(html, new RegExp(updateCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
   }
   assert.match(switcher, /role="tablist"/);
-  assert.match(switcher, />\s*For you\s*</);
-  assert.match(switcher, />\s*For your agent\s*</);
-  assert.match(switcher, /Copy Prompt/);
+  assert.match(switcher, /"給你" : "For you"/);
+  assert.match(switcher, /"給你的 Agent" : "For your agent"/);
+  assert.match(switcher, /"複製 Prompt" : "Copy Prompt"/);
   assert.match(switcher, /navigator[.]clipboard[.]writeText/);
+});
+
+test("translates the complete site and keeps one language switch across routes", async () => {
+  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  const provider = await readFile(
+    new URL("../app/components/LanguageProvider.tsx", import.meta.url),
+    "utf8",
+  );
+  const header = await readFile(
+    new URL("../app/components/SiteHeader.tsx", import.meta.url),
+    "utf8",
+  );
+  const copyButton = await readFile(
+    new URL("../app/components/CopyButton.tsx", import.meta.url),
+    "utf8",
+  );
+  const docsShell = await readFile(new URL("../app/docs/DocsShell.tsx", import.meta.url), "utf8");
+  const docsData = await readFile(new URL("../app/docs/docsData.ts", import.meta.url), "utf8");
+  const zhArticles = await readFile(new URL("../app/docs/ZhDocArticle.tsx", import.meta.url), "utf8");
+  const notFound = await readFile(new URL("../app/not-found.tsx", import.meta.url), "utf8");
+
+  assert.match(layout, /<LanguageProvider>\{children\}<\/LanguageProvider>/);
+  assert.match(provider, /localStorage[.]getItem\("atj-language"\)/);
+  assert.match(provider, /localStorage[.]setItem\("atj-language", nextLanguage\)/);
+  assert.match(provider, /document[.]documentElement[.]lang = nextLanguage/);
+  assert.equal(header.match(/className="language-button"/g)?.length, 2);
+  assert.doesNotMatch(header, /!docs\s*&&\s*\(\s*<button\s+className="language-button"/);
+  assert.match(copyButton, /zh \? "複製" : "Copy"/);
+  assert.match(copyButton, /zh \? "已複製" : "Copied"/);
+  assert.match(docsShell, /docsPagesFor\(language\)/);
+  assert.match(docsShell, /搜尋文件/);
+  assert.match(docsShell, /需要協助/);
+  assert.match(docsShell, /快速連結/);
+  for (const title of ["介紹", "開始使用", "資料夾規範", "草稿與模板", "上傳至 Overleaf", "疑難排解"]) {
+    assert.match(docsData, new RegExp(`title: "${title}"`), title);
+  }
+  for (const translatedPassage of [
+    "任何資料都能成為論文",
+    "既有安裝不會被直接覆蓋",
+    "證據來源基準",
+    "把移轉視為新一次產生流程",
+    "三步驟上傳",
+    "格式無法解決證據問題",
+  ]) {
+    assert.match(zhArticles, new RegExp(translatedPassage), translatedPassage);
+  }
+  assert.match(notFound, /找不到頁面/);
+  assert.match(notFound, /這一頁不在論文裡/);
+  assert.match(notFound, /<SiteHeader minimal \/>/);
 });
 
 test("introduces the local PDF and LaTeX workspace in both landing languages", async () => {
@@ -92,6 +142,9 @@ test("introduces the local PDF and LaTeX workspace in both landing languages", a
   assert.equal(copy.match(/titleJournal: "Journal"/g)?.length, 2);
   assert.equal(copy.match(/titleEnd: "out[.]"/g)?.length, 2);
   assert.match(showcase, /useState<WorkspaceTab>\("pdf"\)/);
+  assert.match(showcase, /function recompile\(\)/);
+  assert.match(showcase, /onClick=\{recompile\}/);
+  assert.match(showcase, /"正在編譯 PDF"/);
   assert.match(showcase, /127[.]0[.]0[.]1:43127/);
   assert.match(header, /className="language-button"/);
   assert.match(header, /將網站切換為繁體中文/);
@@ -135,4 +188,30 @@ test("keeps the deployable source frontend-only", async () => {
   await assert.rejects(access(new URL("../open-next.config.ts", import.meta.url)));
   await assert.rejects(access(new URL("../.open-next", import.meta.url)));
   await assert.rejects(access(new URL("../.openai", import.meta.url)));
+});
+
+test("keeps every exported internal link target valid", async () => {
+  for (const [route, relative] of routeFiles) {
+    const html = await readFile(new URL(relative, import.meta.url), "utf8");
+    const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+
+    for (const href of hrefs) {
+      if (/^(https?:|mailto:|tel:)/.test(href) || href.startsWith("/_next/") || href === "/favicon.ico") continue;
+      if (href.startsWith("#")) {
+        assert.match(html, new RegExp(`id="${href.slice(1)}"`), `${route} ${href}`);
+        continue;
+      }
+      if (!href.startsWith("/")) continue;
+
+      const [rawPath, hash] = href.split("#");
+      if (/[.][a-z0-9]+(?:[?].*)?$/i.test(rawPath)) continue;
+      const path = rawPath.length > 1 ? rawPath.replace(/\/$/, "") : rawPath;
+      assert.ok(routeFiles.has(path), `${route} links to missing route ${href}`);
+
+      if (hash) {
+        const target = await readFile(new URL(routeFiles.get(path), import.meta.url), "utf8");
+        assert.match(target, new RegExp(`id="${hash}"`), `${route} links to missing anchor ${href}`);
+      }
+    }
+  }
 });

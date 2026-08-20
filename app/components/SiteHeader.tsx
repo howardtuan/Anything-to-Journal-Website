@@ -2,22 +2,22 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { HomeLanguage } from "../homeCopy";
+import { useLanguage } from "./LanguageProvider";
 
 type SiteHeaderProps = {
   docs?: boolean;
+  minimal?: boolean;
   onSearch?: () => void;
-  language?: HomeLanguage;
-  onLanguageToggle?: () => void;
 };
 
 const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
 const githubLabel = "View Anything-to-Journal on GitHub (opens in a new tab)";
 
-export function SiteHeader({ docs = false, onSearch, language = "en", onLanguageToggle }: SiteHeaderProps) {
+export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
-  const zh = !docs && language === "zh-TW";
+  const { language, toggleLanguage } = useLanguage();
+  const zh = language === "zh-TW";
 
   useEffect(() => {
     const saved = window.localStorage.getItem("atj-theme");
@@ -27,10 +27,6 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
     const frame = window.requestAnimationFrame(() => setDark(nextDark));
     return () => window.cancelAnimationFrame(frame);
   }, []);
-
-  useEffect(() => {
-    if (docs) document.documentElement.lang = "en";
-  }, [docs]);
 
   function toggleTheme() {
     const nextDark = !dark;
@@ -53,10 +49,15 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
           {docs ? (
             <>
               <button className="search-trigger" type="button" onClick={onSearch}>
-                <span>Search docs</span>
+                <span>{zh ? "搜尋文件" : "Search docs"}</span>
                 <kbd>⌘ K</kbd>
               </button>
-              <Link href="/">Home</Link>
+              <Link href="/">{zh ? "首頁" : "Home"}</Link>
+            </>
+          ) : minimal ? (
+            <>
+              <Link href="/">{zh ? "首頁" : "Home"}</Link>
+              <Link href="/docs">{zh ? "文件" : "Docs"}</Link>
             </>
           ) : (
             <>
@@ -76,17 +77,15 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
           >
             GitHub <span aria-hidden="true">↗</span>
           </a>
-          {!docs && onLanguageToggle && (
-            <button
-              className="language-button"
-              type="button"
-              onClick={onLanguageToggle}
-              aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
-              title={zh ? "Switch to English" : "切換為繁體中文"}
-            >
-              {zh ? "EN" : "中文"}
-            </button>
-          )}
+          <button
+            className="language-button"
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
+            title={zh ? "Switch to English" : "切換為繁體中文"}
+          >
+            {zh ? "EN" : "中文"}
+          </button>
           <button
             className="icon-button"
             type="button"
@@ -96,7 +95,7 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
           >
             <span aria-hidden="true">{dark ? "☼" : "◐"}</span>
           </button>
-          {!docs && (
+          {!docs && !minimal && (
             <Link className="nav-cta" href="/docs/getting-started">
               {zh ? "開始使用" : "Get started"} <span aria-hidden="true">↗</span>
             </Link>
@@ -109,21 +108,19 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
               className="icon-button"
               type="button"
               onClick={onSearch}
-              aria-label="Search documentation"
+              aria-label={zh ? "搜尋文件" : "Search documentation"}
             >
               ⌕
             </button>
           )}
-          {!docs && onLanguageToggle && (
-            <button
-              className="language-button"
-              type="button"
-              onClick={onLanguageToggle}
-              aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
-            >
-              {zh ? "EN" : "中文"}
-            </button>
-          )}
+          <button
+            className="language-button"
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
+          >
+            {zh ? "EN" : "中文"}
+          </button>
           <button
             className="icon-button"
             type="button"
@@ -159,12 +156,12 @@ export function SiteHeader({ docs = false, onSearch, language = "en", onLanguage
           <Link href="/docs/overleaf" onClick={() => setMenuOpen(false)}>
             {zh ? "Overleaf 上傳" : "Overleaf upload"}
           </Link>
-          {!docs && (
+          {!docs && !minimal && (
             <a href="#workspace" onClick={() => setMenuOpen(false)}>
               {zh ? "論文工作區" : "Manuscript workspace"}
             </a>
           )}
-          {!docs && (
+          {!docs && !minimal && (
             <a href="#faq" onClick={() => setMenuOpen(false)}>
               {zh ? "常見問題" : "FAQ"}
             </a>
