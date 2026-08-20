@@ -660,87 +660,191 @@ html[lang="zh-TW"] .hero-title {
   font-size: 14px;
 }
 
-.install-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 2px solid var(--blue);
-  border-left: 1px solid var(--blue);
+.install-switcher {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(34px, 5vw, 58px);
+  border-top: 2px solid var(--demo-blue);
+  border-right: 1px solid var(--demo-red);
+  border-bottom: 2px solid var(--demo-red);
+  border-left: 1px solid var(--demo-blue);
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+  box-shadow: 18px 18px 0 var(--blue-soft);
+  overflow: hidden;
 }
 
-.install-grid article {
-  min-width: 0;
-  padding: clamp(24px, 4vw, 48px);
-  border-right: 1px solid var(--line-strong);
-  border-bottom: 2px solid var(--accent);
-  background: var(--paper);
+.install-switcher::before,
+.install-switcher::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
 }
 
-.install-grid article:last-child {
-  background: var(--blue-soft);
+.install-switcher::before {
+  top: 0;
+  right: 8%;
+  width: 110px;
+  height: 24px;
+  border-right: 1px solid var(--demo-red);
+  border-bottom: 1px solid var(--demo-red);
 }
 
-.install-card-meta {
+.install-switcher::after {
+  bottom: 0;
+  left: 7%;
+  width: 140px;
+  height: 20px;
+  border-top: 1px solid var(--demo-blue);
+  border-left: 1px solid var(--demo-blue);
+}
+
+.install-audience-tabs {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--blue);
-  font-family: var(--font-mono), monospace;
-  font-size: 9px;
-  letter-spacing: 0.11em;
+  width: fit-content;
+  margin-bottom: 27px;
 }
 
-.install-card-meta i {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.install-grid h3 {
-  margin: 48px 0 12px;
-  font-size: clamp(25px, 3vw, 38px);
-  font-weight: 570;
-  letter-spacing: -0.045em;
-  line-height: 1.05;
-}
-
-.install-grid article > p {
-  max-width: 520px;
-  min-height: 44px;
-  margin: 0 0 30px;
-  color: var(--muted);
+.install-audience-tabs button {
+  position: relative;
+  min-height: 34px;
+  padding: 0 22px;
+  border: 0;
+  background: transparent;
+  color: var(--demo-muted);
+  cursor: pointer;
   font-size: 13px;
+  text-align: left;
 }
 
-.install-command {
+.install-audience-tabs button:first-child { padding-left: 0; }
+.install-audience-tabs button + button { border-left: 1px solid var(--demo-line); }
+.install-audience-tabs button:hover,
+.install-audience-tabs button.active { color: var(--demo-ink); }
+
+.install-audience-tabs button.active::after {
+  position: absolute;
+  right: 22px;
+  bottom: -5px;
+  left: 22px;
+  height: 2px;
+  background: var(--demo-blue);
+  box-shadow: 14px 0 0 var(--demo-red);
+  content: "";
+}
+
+.install-audience-tabs button:first-child.active::after { left: 0; }
+
+.install-switcher-panel {
+  position: relative;
+  z-index: 1;
+  animation: install-panel-in 220ms ease-out both;
+}
+
+@keyframes install-panel-in {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.install-primary-action {
   display: grid;
-  min-width: 0;
-  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+  min-height: 72px;
+  padding: 0 27px;
+  grid-template-columns: 22px minmax(0, 1fr) 26px;
   border-top: 1px solid var(--demo-blue);
   border-right: 1px solid var(--demo-red);
   border-bottom: 1px solid var(--demo-red);
   border-left: 1px solid var(--demo-blue);
-  background: var(--demo-bg);
+  border-radius: 999px;
+  background: var(--demo-panel);
   color: var(--demo-ink);
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms ease, transform 160ms ease;
 }
 
-.install-command code {
+.install-primary-action:hover {
+  background: var(--demo-panel-hover);
+  transform: translateY(-2px);
+}
+
+.install-primary-action code,
+.install-primary-action > span:nth-child(2) {
   min-width: 0;
-  padding: 17px 18px;
-  overflow-x: auto;
-  font-size: 11px;
+  overflow: hidden;
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(12px, 1.45vw, 16px);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.install-command .copy-button {
-  min-height: 100%;
-  border: 0;
-  border-left: 1px solid var(--demo-blue);
-  background: var(--demo-panel);
-  color: var(--demo-muted);
+.install-action-symbol {
+  color: var(--demo-red);
+  font-family: var(--font-mono), monospace;
+  font-size: 20px;
 }
 
-.install-command .copy-button:hover {
-  color: var(--demo-red);
+.install-action-symbol.agent { color: var(--demo-blue); }
+
+.copy-mark {
+  position: relative;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  color: #65dbb0;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
 }
+
+.copy-mark i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--demo-muted);
+}
+
+.copy-mark i:first-child { top: 4px; left: 4px; }
+.copy-mark i:last-child { right: 4px; bottom: 4px; background: var(--demo-panel); }
+.install-primary-action:hover .copy-mark i:last-child { background: var(--demo-panel-hover); }
+.copy-mark.copied { color: #65dbb0; }
+
+.install-switcher-meta {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  padding: 14px 8px 0;
+  color: var(--demo-muted);
+  font-size: 10px;
+}
+
+.install-switcher-meta > button {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  max-width: 100%;
+  padding: 8px 11px;
+  border: 0;
+  border-bottom: 1px solid var(--demo-blue);
+  background: transparent;
+  color: var(--demo-ink);
+  cursor: pointer;
+}
+
+.install-switcher-meta > button:hover { border-bottom-color: var(--demo-red); }
+.install-switcher-meta code { overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.install-switcher-meta .copy-mark { width: 16px; height: 16px; }
+.install-switcher-meta .copy-mark i { width: 8px; height: 8px; }
+.install-switcher-meta.agent-note { align-items: flex-start; }
+.install-switcher-meta.agent-note span:last-child { color: var(--demo-faint); text-align: right; }
 
 .install-note {
   margin: 24px 0 0;
@@ -1693,7 +1797,7 @@ html[lang="zh-TW"] .hero-title {
 
 .docs-frame {
   display: grid;
-  width: min(100%, 1540px);
+  width: min(100%, 1460px);
   min-height: calc(100vh - 64px);
   margin: 0 auto;
   grid-template-columns: 252px minmax(0, 1fr) 214px;
@@ -1917,7 +2021,6 @@ html[lang="zh-TW"] .hero-title {
   .section-heading .section-index { display: block; margin-bottom: 25px; }
   .section-heading > div { display: block; }
   .section-heading p { margin-top: 20px; }
-  .install-grid { grid-template-columns: 1fr; }
   .decision-cards { grid-template-columns: 1fr 1fr; }
   .overleaf-band { gap: 45px; grid-template-columns: 1fr; }
   .faq-section { grid-template-columns: 1fr; }
@@ -1950,11 +2053,17 @@ html[lang="zh-TW"] .hero-title {
   .button { width: 100%; }
   .section-rule { padding: 78px 20px; }
   .section-heading { margin-bottom: 38px; }
-  .install-grid article { padding: 27px 20px; }
-  .install-grid h3 { margin-top: 34px; }
-  .install-grid article > p { min-height: 0; }
-  .install-command { grid-template-columns: 1fr; }
-  .install-command .copy-button { min-height: 38px; border-top: 1px solid var(--demo-blue); border-left: 0; }
+  .install-switcher { padding: 30px 18px; box-shadow: 8px 8px 0 var(--blue-soft); }
+  .install-audience-tabs button { padding-right: 15px; padding-left: 15px; font-size: 12px; }
+  .install-audience-tabs button:first-child { padding-left: 0; }
+  .install-audience-tabs button.active::after { right: 15px; left: 15px; }
+  .install-audience-tabs button:first-child.active::after { left: 0; }
+  .install-primary-action { gap: 10px; min-height: 62px; padding: 0 18px; grid-template-columns: 18px minmax(0, 1fr) 22px; }
+  .install-primary-action code, .install-primary-action > span:nth-child(2) { font-size: 10px; }
+  .install-action-symbol { font-size: 17px; }
+  .install-switcher-meta { display: grid; gap: 8px; }
+  .install-switcher-meta > button { max-width: 100%; justify-content: space-between; }
+  .install-switcher-meta.agent-note span:last-child { text-align: left; }
   .demo-tabs button { gap: 6px; padding: 0 9px; font-size: 8px; }
   .demo-stage { min-height: 680px; grid-template-columns: 1fr; }
   .demo-copy { min-height: 335px; padding: 36px 25px; border-right: 0; border-bottom: 1px solid var(--demo-blue); }

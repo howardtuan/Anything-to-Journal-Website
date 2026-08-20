@@ -21,3 +21,12 @@ test("keeps the social preview at the required Open Graph size", async () => {
   assert.equal(png.readUInt32BE(16), 1200);
   assert.equal(png.readUInt32BE(20), 630);
 });
+
+test("aligns the documentation frame with the shared header rails", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const headerWidth = css.match(/[.]header-inner\s*\{[\s\S]*?width:\s*([^;]+);/)?.[1];
+  const docsWidth = css.match(/[.]docs-frame\s*\{[\s\S]*?width:\s*([^;]+);/)?.[1];
+
+  assert.equal(headerWidth, "min(100%, 1460px)");
+  assert.equal(docsWidth, headerWidth);
+});

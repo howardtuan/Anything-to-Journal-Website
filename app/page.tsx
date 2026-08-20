@@ -2,15 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CopyButton } from "./components/CopyButton";
 import { HomeDemo } from "./components/HomeDemo";
+import { InstallSwitcher } from "./components/InstallSwitcher";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
 import { WorkspaceShowcase } from "./components/WorkspaceShowcase";
 import { homeCopy, type HomeLanguage } from "./homeCopy";
-
-const installCommand = "npx anything-to-journal@latest install";
-const updateCommand = "npx anything-to-journal@latest update";
 
 export default function Home() {
   const [language, setLanguage] = useState<HomeLanguage>("en");
@@ -59,18 +56,7 @@ export default function Home() {
           <span className="section-index">{copy.install.index}</span>
           <div><h2>{copy.install.title}</h2><p>{copy.install.intro}</p></div>
         </div>
-        <div className="install-grid">
-          <article>
-            <div className="install-card-meta"><span>{copy.install.firstMeta}</span><i>01</i></div>
-            <h3>{copy.install.firstTitle}</h3><p>{copy.install.firstBody}</p>
-            <div className="install-command"><code>{installCommand}</code><CopyButton value={installCommand} label={copy.install.copyInstall} copiedLabel={copy.install.copied} /></div>
-          </article>
-          <article>
-            <div className="install-card-meta"><span>{copy.install.updateMeta}</span><i>02</i></div>
-            <h3>{copy.install.updateTitle}</h3><p>{copy.install.updateBody}</p>
-            <div className="install-command"><code>{updateCommand}</code><CopyButton value={updateCommand} label={copy.install.copyUpdate} copiedLabel={copy.install.copied} /></div>
-          </article>
-        </div>
+        <InstallSwitcher language={language} />
         <p className="install-note">{copy.install.note} <code>~/.codex/skills/anything-to-journal</code>.</p>
       </section>
 

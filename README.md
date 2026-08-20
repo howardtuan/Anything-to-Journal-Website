@@ -14,7 +14,7 @@ The site contains no database, API routes, user accounts, analytics, or server-s
 - `/docs/overleaf` — exact upload and editing guide;
 - `/docs/troubleshooting` — common blockers and recovery.
 
-The frontend includes responsive navigation, dark mode persisted in `localStorage`, an English / Traditional Chinese landing-page switch, a mobile docs browser, Cmd/Ctrl+K client-side search, copy buttons, interactive source and Manuscript Workspace demos, and accessible FAQ accordions.
+The frontend includes responsive navigation, dark mode persisted in `localStorage`, an English / Traditional Chinese landing-page switch, a `For you / For your agent` install switcher, a mobile docs browser, Cmd/Ctrl+K client-side search, copy buttons, interactive source and Manuscript Workspace demos, and accessible FAQ accordions.
 
 The landing page now explains the complete post-generation workflow: the Agent produces LaTeX, PDF, references, audit, and submission files; then the user can open the local-only Manuscript Workspace, switch between PDF Preview and LaTeX, continue editing through Codex chat or by hand, and still use the existing Overleaf ZIP handoff. The language preference is stored locally under `atj-language`; documentation routes intentionally remain in English.
 

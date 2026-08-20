@@ -54,14 +54,20 @@ test("publishes copyable npx install and update instructions", async () => {
     new URL("../out/docs/getting-started/index.html", import.meta.url),
     "utf8",
   );
-  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const switcher = await readFile(
+    new URL("../app/components/InstallSwitcher.tsx", import.meta.url),
+    "utf8",
+  );
 
   for (const [surface, html] of [["home", home], ["getting started", gettingStarted]]) {
     assert.match(html, new RegExp(installCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
     assert.match(html, new RegExp(updateCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
   }
-  assert.match(source, /<CopyButton value=\{installCommand\} label=\{copy[.]install[.]copyInstall\}/);
-  assert.match(source, /<CopyButton value=\{updateCommand\} label=\{copy[.]install[.]copyUpdate\}/);
+  assert.match(switcher, /role="tablist"/);
+  assert.match(switcher, />\s*For you\s*</);
+  assert.match(switcher, />\s*For your agent\s*</);
+  assert.match(switcher, /Copy Prompt/);
+  assert.match(switcher, /navigator[.]clipboard[.]writeText/);
 });
 
 test("introduces the local PDF and LaTeX workspace in both landing languages", async () => {
