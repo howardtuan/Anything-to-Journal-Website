@@ -162,9 +162,9 @@ export const homeCopy = {
     hero: {
       leftRail: "輸入 / 任何資料",
       kicker: "AGENT SKILL / 論文工作流程",
-      titleFirst: "資料交進來。",
-      titleJournal: "論文",
-      titleEnd: "交出去。",
+      titleFirst: "Anything in.",
+      titleJournal: "Journal",
+      titleEnd: "out.",
       body: "把所有研究資料放進同一個資料夾。Agent 會完成 LaTeX、PDF、references、audit 與投稿檔案，接著開啟本機工作區，讓你進行最後編修。",
       primary: "從資料夾開始",
       secondary: "閱讀文件",

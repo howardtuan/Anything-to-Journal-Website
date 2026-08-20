@@ -82,6 +82,9 @@ test("introduces the local PDF and LaTeX workspace in both landing languages", a
   assert.match(source, /id="workspace"/);
   assert.match(copy, /PDF 預覽/);
   assert.match(copy, /論文工作區/);
+  assert.equal(copy.match(/titleFirst: "Anything in[.]"/g)?.length, 2);
+  assert.equal(copy.match(/titleJournal: "Journal"/g)?.length, 2);
+  assert.equal(copy.match(/titleEnd: "out[.]"/g)?.length, 2);
   assert.match(showcase, /useState<WorkspaceTab>\("pdf"\)/);
   assert.match(showcase, /127[.]0[.]0[.]1:43127/);
   assert.match(header, /className="language-button"/);
