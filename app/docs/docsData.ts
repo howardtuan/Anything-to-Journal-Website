@@ -12,7 +12,7 @@ export const docsPages: DocPageInfo[] = [
   {
     href: "/docs",
     title: "Introduction",
-    description: "What Anything-to-Journal does and how the folder-first workflow works.",
+    description: "The folder-first workflow, generated deliverables, and local PDF/LaTeX workspace.",
     group: "Start here",
     index: "00",
     headings: [
@@ -21,12 +21,12 @@ export const docsPages: DocPageInfo[] = [
       { id: "what-comes-out", label: "What comes out" },
       { id: "design-principles", label: "Design principles" },
     ],
-    keywords: ["introduction", "overview", "workflow", "agent", "journal"],
+    keywords: ["introduction", "overview", "workflow", "agent", "journal", "workspace", "PDF Preview", "LaTeX"],
   },
   {
     href: "/docs/getting-started",
     title: "Getting started",
-    description: "Run the complete workflow from a fresh folder to a first manuscript.",
+    description: "Run the complete workflow from a fresh folder to a first manuscript and local edit.",
     group: "Start here",
     index: "01",
     headings: [

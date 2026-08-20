@@ -2,18 +2,22 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { HomeLanguage } from "../homeCopy";
 
 type SiteHeaderProps = {
   docs?: boolean;
   onSearch?: () => void;
+  language?: HomeLanguage;
+  onLanguageToggle?: () => void;
 };
 
 const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
 const githubLabel = "View Anything-to-Journal on GitHub (opens in a new tab)";
 
-export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
+export function SiteHeader({ docs = false, onSearch, language = "en", onLanguageToggle }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const zh = !docs && language === "zh-TW";
 
   useEffect(() => {
     const saved = window.localStorage.getItem("atj-theme");
@@ -23,6 +27,10 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
     const frame = window.requestAnimationFrame(() => setDark(nextDark));
     return () => window.cancelAnimationFrame(frame);
   }, []);
+
+  useEffect(() => {
+    if (docs) document.documentElement.lang = "en";
+  }, [docs]);
 
   function toggleTheme() {
     const nextDark = !dark;
@@ -34,14 +42,14 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link className="brand" href="/" aria-label="Anything-to-Journal home">
+        <Link className="brand" href="/" aria-label={zh ? "Anything-to-Journal 首頁" : "Anything-to-Journal home"}>
           <span className="brand-mark" aria-hidden="true">
             <span>J</span>
           </span>
           <span className="brand-word">anything-to-journal</span>
         </Link>
 
-        <nav className="desktop-nav" aria-label="Primary navigation">
+        <nav className="desktop-nav" aria-label={zh ? "主要導覽" : "Primary navigation"}>
           {docs ? (
             <>
               <button className="search-trigger" type="button" onClick={onSearch}>
@@ -52,10 +60,11 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
             </>
           ) : (
             <>
-              <a href="#workflow">Workflow</a>
-              <a href="#output">Output</a>
-              <a href="#faq">FAQ</a>
-              <Link href="/docs">Docs</Link>
+              <a href="#workflow">{zh ? "流程" : "Workflow"}</a>
+              <a href="#workspace">{zh ? "論文工作區" : "Workspace"}</a>
+              <a href="#output">{zh ? "輸出" : "Output"}</a>
+              <a href="#faq">{zh ? "問答" : "FAQ"}</a>
+              <Link href="/docs">{zh ? "文件" : "Docs"}</Link>
             </>
           )}
           <a
@@ -63,22 +72,33 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={githubLabel}
+            aria-label={zh ? "在 GitHub 查看 Anything-to-Journal（開啟新分頁）" : githubLabel}
           >
             GitHub <span aria-hidden="true">↗</span>
           </a>
+          {!docs && onLanguageToggle && (
+            <button
+              className="language-button"
+              type="button"
+              onClick={onLanguageToggle}
+              aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
+              title={zh ? "Switch to English" : "切換為繁體中文"}
+            >
+              {zh ? "EN" : "中文"}
+            </button>
+          )}
           <button
             className="icon-button"
             type="button"
             onClick={toggleTheme}
-            aria-label={dark ? "Use light theme" : "Use dark theme"}
-            title={dark ? "Use light theme" : "Use dark theme"}
+            aria-label={dark ? (zh ? "使用淺色模式" : "Use light theme") : (zh ? "使用深色模式" : "Use dark theme")}
+            title={dark ? (zh ? "使用淺色模式" : "Use light theme") : (zh ? "使用深色模式" : "Use dark theme")}
           >
             <span aria-hidden="true">{dark ? "☼" : "◐"}</span>
           </button>
           {!docs && (
             <Link className="nav-cta" href="/docs/getting-started">
-              Get started <span aria-hidden="true">↗</span>
+              {zh ? "開始使用" : "Get started"} <span aria-hidden="true">↗</span>
             </Link>
           )}
         </nav>
@@ -94,11 +114,21 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
               ⌕
             </button>
           )}
+          {!docs && onLanguageToggle && (
+            <button
+              className="language-button"
+              type="button"
+              onClick={onLanguageToggle}
+              aria-label={zh ? "Switch website to English" : "將網站切換為繁體中文"}
+            >
+              {zh ? "EN" : "中文"}
+            </button>
+          )}
           <button
             className="icon-button"
             type="button"
             onClick={toggleTheme}
-            aria-label={dark ? "Use light theme" : "Use dark theme"}
+            aria-label={dark ? (zh ? "使用淺色模式" : "Use light theme") : (zh ? "使用深色模式" : "Use dark theme")}
           >
             {dark ? "☼" : "◐"}
           </button>
@@ -106,7 +136,7 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
             className="menu-button"
             type="button"
             aria-expanded={menuOpen}
-            aria-label="Toggle navigation"
+            aria-label={zh ? "切換導覽選單" : "Toggle navigation"}
             onClick={() => setMenuOpen((value) => !value)}
           >
             <span />
@@ -116,22 +146,27 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
       </div>
 
       {menuOpen && (
-        <nav className="mobile-nav" aria-label="Mobile navigation">
+        <nav className="mobile-nav" aria-label={zh ? "行動版導覽" : "Mobile navigation"}>
           <Link href="/" onClick={() => setMenuOpen(false)}>
-            Home
+            {zh ? "首頁" : "Home"}
           </Link>
           <Link href="/docs" onClick={() => setMenuOpen(false)}>
-            Documentation
+            {zh ? "文件" : "Documentation"}
           </Link>
           <Link href="/docs/getting-started" onClick={() => setMenuOpen(false)}>
-            Getting started
+            {zh ? "開始使用" : "Getting started"}
           </Link>
           <Link href="/docs/overleaf" onClick={() => setMenuOpen(false)}>
-            Overleaf upload
+            {zh ? "Overleaf 上傳" : "Overleaf upload"}
           </Link>
           {!docs && (
+            <a href="#workspace" onClick={() => setMenuOpen(false)}>
+              {zh ? "論文工作區" : "Manuscript workspace"}
+            </a>
+          )}
+          {!docs && (
             <a href="#faq" onClick={() => setMenuOpen(false)}>
-              FAQ
+              {zh ? "常見問題" : "FAQ"}
             </a>
           )}
           <a
@@ -139,7 +174,7 @@ export function SiteHeader({ docs = false, onSearch }: SiteHeaderProps) {
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={githubLabel}
+            aria-label={zh ? "在 GitHub 查看 Anything-to-Journal（開啟新分頁）" : githubLabel}
             onClick={() => setMenuOpen(false)}
           >
             GitHub <span aria-hidden="true">↗</span>

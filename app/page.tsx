@@ -1,179 +1,98 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { CopyButton } from "./components/CopyButton";
 import { HomeDemo } from "./components/HomeDemo";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
+import { WorkspaceShowcase } from "./components/WorkspaceShowcase";
+import { homeCopy, type HomeLanguage } from "./homeCopy";
 
 const installCommand = "npx anything-to-journal@latest install";
 const updateCommand = "npx anything-to-journal@latest update";
 
-const workflow = [
-  {
-    number: "01",
-    label: "ASSEMBLE",
-    title: "Start with a fresh folder.",
-    copy: "Create one clean workspace and put every relevant source inside. Mixed formats are expected.",
-  },
-  {
-    number: "02",
-    label: "OPEN",
-    title: "Bring your agent to it.",
-    copy: "Open the agent from that folder and ask it to use Anything-to-Journal. The folder becomes the working context.",
-  },
-  {
-    number: "03",
-    label: "CONFIRM",
-    title: "Choose draft or template.",
-    copy: "The agent must confirm whether you want a flexible draft or a manuscript matched to a supplied journal template.",
-  },
-  {
-    number: "04",
-    label: "REVIEW",
-    title: "Edit the journal anywhere.",
-    copy: "Receive readable sources, a compiled preview, and one upload-ready ZIP. Keep revising in Overleaf or locally.",
-  },
-];
-
-const faqs = [
-  {
-    question: "What can I put in the source folder?",
-    answer:
-      "Anything that helps explain the work: PDFs, notes, Word files, spreadsheets, CSV data, figures, transcripts, citations, code, earlier drafts, and journal instructions.",
-  },
-  {
-    question: "Do I need to organize everything first?",
-    answer:
-      "No. Clear names help, but the skill is designed to inspect mixed material. Keep the folder dedicated to one manuscript and exclude secrets or unrelated files.",
-  },
-  {
-    question: "How do I update the skill?",
-    answer:
-      "Run npx anything-to-journal@latest update. The updater verifies the existing skill, stages the newest published release, and replaces the old copy safely.",
-  },
-  {
-    question: "What is the difference between draft and template mode?",
-    answer:
-      "Draft mode prioritizes a clean, portable article structure. Template mode follows the class files, sample manuscript, and author guide for a specific target journal.",
-  },
-  {
-    question: "Can I edit the generated manuscript myself?",
-    answer:
-      "Yes. The output is deliberately plain LaTeX with separate sections, figures, and bibliography files. It is built for continued human editing.",
-  },
-  {
-    question: "What exactly do I upload to Overleaf?",
-    answer:
-      "Upload journal-output/submission/overleaf-upload.zip using New Project → Upload Project. The bundle already places main.tex at the ZIP root, where Overleaf expects it.",
-  },
-];
-
 export default function Home() {
+  const [language, setLanguage] = useState<HomeLanguage>("en");
+  const copy = homeCopy[language];
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("atj-language");
+    const nextLanguage: HomeLanguage = saved === "zh-TW" ? "zh-TW" : "en";
+    document.documentElement.lang = nextLanguage;
+    const frame = window.requestAnimationFrame(() => setLanguage(nextLanguage));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  function toggleLanguage() {
+    const nextLanguage: HomeLanguage = language === "en" ? "zh-TW" : "en";
+    setLanguage(nextLanguage);
+    document.documentElement.lang = nextLanguage;
+    window.localStorage.setItem("atj-language", nextLanguage);
+  }
+
   return (
     <main id="top">
-      <SiteHeader />
+      <SiteHeader language={language} onLanguageToggle={toggleLanguage} />
 
       <section className="hero shell-grid">
-        <div className="rail-label rail-left" aria-hidden="true">
-          INPUT / ANYTHING
-        </div>
+        <div className="rail-label rail-left" aria-hidden="true">{copy.hero.leftRail}</div>
         <div className="hero-inner">
-          <div className="hero-kicker reveal-1">
-            <span className="signal-dot" />
-            AGENT SKILL / MANUSCRIPT WORKFLOW
-          </div>
+          <div className="hero-kicker reveal-1"><span className="signal-dot" />{copy.hero.kicker}</div>
           <h1 className="hero-title reveal-2">
-            Anything in.
-            <br />
-            <span>Journal</span> out.
+            {copy.hero.titleFirst}<br /><span>{copy.hero.titleJournal}</span> {copy.hero.titleEnd}
           </h1>
           <div className="hero-bottom reveal-3">
-            <p>
-              Drop every source into one folder. Your agent turns the context into
-              an editable journal manuscript—structured, referenced, and ready for
-              Overleaf.
-            </p>
+            <p>{copy.hero.body}</p>
             <div className="hero-actions">
-              <Link className="button button-dark" href="/docs/getting-started">
-                Start with a folder <span>↗</span>
-              </Link>
-              <Link className="text-link" href="/docs">
-                Read the docs <span>→</span>
-              </Link>
+              <Link className="button button-dark" href="/docs/getting-started">{copy.hero.primary} <span>↗</span></Link>
+              <Link className="text-link" href="/docs">{copy.hero.secondary} <span>→</span></Link>
             </div>
           </div>
-          <div className="proof-marks" aria-hidden="true">
-            <span>01</span>
-            <i />
-            <span>MANUSCRIPT / EDITABLE</span>
-          </div>
+          <div className="proof-marks" aria-hidden="true"><span>01</span><i /><span>{copy.hero.proof}</span></div>
         </div>
-        <div className="rail-label rail-right" aria-hidden="true">
-          OUTPUT / JOURNAL
-        </div>
+        <div className="rail-label rail-right" aria-hidden="true">{copy.hero.rightRail}</div>
       </section>
 
       <section className="install-section section-rule" id="install">
         <div className="section-heading">
-          <span className="section-index">01 / INSTALL</span>
-          <div>
-            <h2>One command to begin.</h2>
-            <p>Install once with npx. Run the update command whenever a new npm release is published.</p>
-          </div>
+          <span className="section-index">{copy.install.index}</span>
+          <div><h2>{copy.install.title}</h2><p>{copy.install.intro}</p></div>
         </div>
         <div className="install-grid">
           <article>
-            <div className="install-card-meta"><span>FIRST INSTALL</span><i>01</i></div>
-            <h3>Install the latest release.</h3>
-            <p>Copies the skill into your Codex skills directory without touching an existing installation.</p>
-            <div className="install-command">
-              <code>{installCommand}</code>
-              <CopyButton value={installCommand} label="Copy install" />
-            </div>
+            <div className="install-card-meta"><span>{copy.install.firstMeta}</span><i>01</i></div>
+            <h3>{copy.install.firstTitle}</h3><p>{copy.install.firstBody}</p>
+            <div className="install-command"><code>{installCommand}</code><CopyButton value={installCommand} label={copy.install.copyInstall} copiedLabel={copy.install.copied} /></div>
           </article>
           <article>
-            <div className="install-card-meta"><span>FUTURE UPDATES</span><i>02</i></div>
-            <h3>Update through the same CLI.</h3>
-            <p>Verifies the installed skill, stages the newest release, and replaces the old copy atomically.</p>
-            <div className="install-command">
-              <code>{updateCommand}</code>
-              <CopyButton value={updateCommand} label="Copy update" />
-            </div>
+            <div className="install-card-meta"><span>{copy.install.updateMeta}</span><i>02</i></div>
+            <h3>{copy.install.updateTitle}</h3><p>{copy.install.updateBody}</p>
+            <div className="install-command"><code>{updateCommand}</code><CopyButton value={updateCommand} label={copy.install.copyUpdate} copiedLabel={copy.install.copied} /></div>
           </article>
         </div>
-        <p className="install-note">Requires Node.js 18 or newer. The default target is <code>~/.codex/skills/anything-to-journal</code>.</p>
+        <p className="install-note">{copy.install.note} <code>~/.codex/skills/anything-to-journal</code>.</p>
       </section>
 
       <section className="demo-section section-rule">
         <div className="section-heading">
-          <span className="section-index">02 / WORKSPACE</span>
-          <div>
-            <h2>One folder is the interface.</h2>
-            <p>No form builder. No import ritual. Keep the full research context together.</p>
-          </div>
+          <span className="section-index">{copy.demo.index}</span>
+          <div><h2>{copy.demo.title}</h2><p>{copy.demo.intro}</p></div>
         </div>
-        <HomeDemo />
+        <HomeDemo language={language} />
       </section>
 
       <section className="workflow-section section-rule" id="workflow">
         <div className="section-heading">
-          <span className="section-index">03 / WORKFLOW</span>
-          <div>
-            <h2>From source pile to journal.</h2>
-            <p>Four explicit steps. One decision before the source content is read.</p>
-          </div>
+          <span className="section-index">{copy.workflow.index}</span>
+          <div><h2>{copy.workflow.title}</h2><p>{copy.workflow.intro}</p></div>
         </div>
         <div className="workflow-grid">
-          {workflow.map((step) => (
+          {copy.workflow.steps.map((step) => (
             <article className="workflow-card" key={step.number}>
-              <div className="workflow-meta">
-                <span>{step.number}</span>
-                <span>{step.label}</span>
-              </div>
-              <div className="workflow-mark" aria-hidden="true">
-                <span />
-              </div>
-              <h3>{step.title}</h3>
-              <p>{step.copy}</p>
+              <div className="workflow-meta"><span>{step.number}</span><span>{step.label}</span></div>
+              <div className="workflow-mark" aria-hidden="true"><span /></div>
+              <h3>{step.title}</h3><p>{step.copy}</p>
             </article>
           ))}
         </div>
@@ -181,82 +100,36 @@ export default function Home() {
 
       <section className="decision-section section-rule" id="templates">
         <div className="decision-intro">
-          <span className="section-index">04 / MODE GATE</span>
-          <h2>
-            The agent asks
-            <br />
-            before it <em>reads.</em>
-          </h2>
-          <p>
-            Format is a deliberate choice, never a silent guess. The workflow pauses
-            before source content is opened until draft mode or a specific journal
-            target is confirmed.
-          </p>
+          <span className="section-index">{copy.decision.index}</span>
+          <h2>{copy.decision.titleBefore}<br />{copy.decision.titleMiddle} <em>{copy.decision.titleAccent}</em></h2>
+          <p>{copy.decision.intro}</p>
         </div>
         <div className="decision-cards">
           <article>
-            <span className="card-letter">A</span>
-            <span className="chip">DEFAULT</span>
-            <h3>Journal draft</h3>
-            <p>
-              A clear, portable manuscript structure for review, iteration, and
-              choosing a venue later.
-            </p>
-            <ul>
-              <li>Standard article sections</li>
-              <li>Readable LaTeX sources</li>
-              <li>Conservative dependencies</li>
-            </ul>
-            <Link href="/docs/templates">Use draft mode →</Link>
+            <span className="card-letter">A</span><span className="chip">{copy.decision.draftChip}</span>
+            <h3>{copy.decision.draftTitle}</h3><p>{copy.decision.draftBody}</p>
+            <ul>{copy.decision.draftItems.map((item) => <li key={item}>{item}</li>)}</ul>
+            <Link href="/docs/templates">{copy.decision.draftLink}</Link>
           </article>
           <article className="accent-card">
-            <span className="card-letter">B</span>
-            <span className="chip">TARGETED</span>
-            <h3>Specific template</h3>
-            <p>
-              A manuscript aligned to the supplied journal class, example article,
-              and submission requirements.
-            </p>
-            <ul>
-              <li>Uses journal-provided files</li>
-              <li>Preserves required structure</li>
-              <li>Records compiler instructions</li>
-            </ul>
-            <Link href="/docs/templates">Add a template →</Link>
+            <span className="card-letter">B</span><span className="chip">{copy.decision.templateChip}</span>
+            <h3>{copy.decision.templateTitle}</h3><p>{copy.decision.templateBody}</p>
+            <ul>{copy.decision.templateItems.map((item) => <li key={item}>{item}</li>)}</ul>
+            <Link href="/docs/templates">{copy.decision.templateLink}</Link>
           </article>
         </div>
       </section>
 
       <section className="output-section section-rule" id="output">
         <div className="output-copy">
-          <span className="section-index">05 / OUTPUT</span>
-          <h2>A manuscript you still own.</h2>
-          <p>
-            Every major section stays separate and legible. Figures remain replaceable.
-            Citations stay in a bibliography file. Nothing is trapped in an opaque editor.
-          </p>
+          <span className="section-index">{copy.output.index}</span><h2>{copy.output.title}</h2><p>{copy.output.intro}</p>
           <div className="output-facts">
-            <div>
-              <strong>01</strong>
-              <span>Editable source</span>
-            </div>
-            <div>
-              <strong>02</strong>
-              <span>Compiled PDF</span>
-            </div>
-            <div>
-              <strong>03</strong>
-              <span>Upload-ready ZIP</span>
-            </div>
+            {copy.output.facts.map((fact, index) => <div key={fact}><strong>{String(index + 1).padStart(2, "0")}</strong><span>{fact}</span></div>)}
           </div>
         </div>
-
         <div className="output-anatomy">
-          <div className="anatomy-bar">
-            <span>DELIVERABLES / FINAL</span>
-            <span className="status-chip">EDITABLE</span>
-          </div>
-          <div className="anatomy-tree" role="img" aria-label="Generated output folder tree">
+          <div className="anatomy-bar"><span>{copy.output.bar}</span><span className="status-chip">{copy.output.editable}</span></div>
+          <div className="anatomy-tree" role="img" aria-label={copy.output.treeLabel}>
             <div className="tree-root"><span>▰</span> journal-output/</div>
             <div><i /> <span>▤</span> manuscript/manuscript.tex</div>
             <div><i /> <span>▤</span> reports/quality-report.md</div>
@@ -268,46 +141,33 @@ export default function Home() {
             <div className="nested"><i /> <span>▤</span> README_OVERLEAF.md</div>
             <div className="nested"><i /> <span>▤</span> manuscript.pdf</div>
           </div>
-          <div className="anatomy-callout">
-            <span>OVERLEAF ROUTE</span>
-            <strong>New Project → Upload Project</strong>
-            <p>Choose <code>submission/overleaf-upload.zip</code>. <code>main.tex</code> is already at the ZIP root.</p>
-          </div>
+          <div className="anatomy-callout"><span>{copy.output.overleafRoute}</span><strong>{copy.output.overleafAction}</strong><p>{copy.output.overleafBody}</p></div>
         </div>
+      </section>
+
+      <section className="workspace-section section-rule" id="workspace">
+        <div className="workspace-intro">
+          <span className="section-index">{copy.workspace.index}</span>
+          <h2>{copy.workspace.title}</h2><p>{copy.workspace.intro}</p>
+          <ul className="workspace-points">{copy.workspace.points.map((point) => <li key={point}>{point}</li>)}</ul>
+          <div className="workspace-routes"><span>{copy.workspace.chat}</span><span>{copy.workspace.browser}</span></div>
+          <p className="workspace-local-note"><span className="green-dot" />{copy.workspace.localOnly}</p>
+        </div>
+        <WorkspaceShowcase language={language} />
       </section>
 
       <section className="overleaf-band">
-        <div>
-          <span className="section-index">06 / HANDOFF</span>
-          <h2>
-            One ZIP.
-            <br />
-            Straight to Overleaf.
-          </h2>
-        </div>
-        <div className="overleaf-steps">
-          <div><span>1</span><p>Open Overleaf and choose <strong>New Project</strong>.</p></div>
-          <div><span>2</span><p>Select <strong>Upload Project</strong>.</p></div>
-          <div><span>3</span><p>Upload <strong>submission/overleaf-upload.zip</strong>.</p></div>
-        </div>
-        <Link className="button button-light" href="/docs/overleaf">
-          Open the Overleaf guide <span>↗</span>
-        </Link>
+        <div><span className="section-index">{copy.overleaf.index}</span><h2>{copy.overleaf.titleFirst}<br />{copy.overleaf.titleSecond}</h2></div>
+        <div className="overleaf-steps">{copy.overleaf.steps.map((step, index) => <div key={step}><span>{index + 1}</span><p>{step}</p></div>)}</div>
+        <Link className="button button-light" href="/docs/overleaf">{copy.overleaf.button} <span>↗</span></Link>
       </section>
 
       <section className="faq-section section-rule" id="faq">
-        <div className="faq-heading">
-          <span className="section-index">07 / FAQ</span>
-          <h2>Questions, resolved.</h2>
-        </div>
+        <div className="faq-heading"><span className="section-index">{copy.faq.index}</span><h2>{copy.faq.title}</h2></div>
         <div className="faq-list">
-          {faqs.map((faq, index) => (
+          {copy.faq.items.map((faq, index) => (
             <details key={faq.question} open={index === 0}>
-              <summary>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{faq.question}</strong>
-                <i aria-hidden="true">+</i>
-              </summary>
+              <summary><span>{String(index + 1).padStart(2, "0")}</span><strong>{faq.question}</strong><i aria-hidden="true">+</i></summary>
               <p>{faq.answer}</p>
             </details>
           ))}
@@ -315,21 +175,12 @@ export default function Home() {
       </section>
 
       <section className="final-cta">
-        <span className="section-index">READY / WHEN YOU ARE</span>
-        <h2>
-          Make a folder.
-          <br />
-          Make it a <em>journal.</em>
-        </h2>
-        <div>
-          <p>The documentation starts with the exact folder contract and first prompt.</p>
-          <Link className="button button-red" href="/docs/getting-started">
-            Get started <span>↗</span>
-          </Link>
-        </div>
+        <span className="section-index">{copy.cta.index}</span>
+        <h2>{copy.cta.titleFirst}<br />{copy.cta.titleSecond} <em>{copy.cta.titleAccent}</em></h2>
+        <div><p>{copy.cta.body}</p><Link className="button button-red" href="/docs/getting-started">{copy.cta.button} <span>↗</span></Link></div>
       </section>
 
-      <SiteFooter />
+      <SiteFooter language={language} />
     </main>
   );
 }

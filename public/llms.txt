@@ -1,6 +1,6 @@
 # Anything-to-Journal
 
-Anything-to-Journal is a folder-first agent skill that turns source material into an editable journal manuscript.
+Anything-to-Journal is a folder-first agent skill that turns source material into an editable journal manuscript, compiled PDF, audit trail, submission bundle, and local PDF/LaTeX editing workspace.
 
 ## Install and update
 
@@ -26,6 +26,19 @@ Requires Node.js 18 or newer.
 3. Open the agent from inside the folder and invoke Anything-to-Journal.
 4. Confirm a flexible journal draft or a specific journal template.
 5. Review the generated manuscript and generation report.
-6. Upload `journal-output/submission/overleaf-upload.zip` with Overleaf: New Project > Upload Project.
+6. Open the local Manuscript Workspace to preview the PDF and edit the actual generated LaTeX.
+7. Continue revising through Codex chat or manual edits; both routes update the same manuscript files.
+8. Run the existing final build and audit, or upload `journal-output/submission/overleaf-upload.zip` with Overleaf: New Project > Upload Project.
 
 The generated ZIP has `main.tex` at its root.
+
+## Manuscript Workspace
+
+- Starts locally with `python scripts/workspace_editor.py <journal-output>`.
+- Binds to `127.0.0.1` and does not upload unpublished manuscripts.
+- Opens with a scrollable PDF Preview and a LaTeX tab for the real `journal-output/manuscript/manuscript.tex` file.
+- Saved edits recompile and refresh the PDF; failed compiles keep the last successful preview.
+- Detects external edits made by Codex and protects unsaved browser changes from being overwritten.
+- The same localhost URL works in Codex Desktop and a regular browser.
+
+The landing page includes an English / Traditional Chinese language switch. Documentation routes remain in English.

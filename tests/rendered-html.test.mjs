@@ -43,7 +43,7 @@ test("ships the GitHub link in desktop and mobile shared navigation", async () =
   assert.equal(header.match(/href=\{githubUrl\}/g)?.length, 2);
   assert.equal(header.match(/target="_blank"/g)?.length, 2);
   assert.equal(header.match(/rel="noopener noreferrer"/g)?.length, 2);
-  assert.equal(header.match(/aria-label=\{githubLabel\}/g)?.length, 2);
+  assert.equal(header.match(/: githubLabel\}/g)?.length, 2);
   assert.match(css, /[.]desktop-nav > [.]github-link/);
   assert.match(css, /[.]mobile-nav [.]github-link/);
 });
@@ -60,8 +60,32 @@ test("publishes copyable npx install and update instructions", async () => {
     assert.match(html, new RegExp(installCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
     assert.match(html, new RegExp(updateCommand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), surface);
   }
-  assert.match(source, /<CopyButton value=\{installCommand\} label="Copy install"/);
-  assert.match(source, /<CopyButton value=\{updateCommand\} label="Copy update"/);
+  assert.match(source, /<CopyButton value=\{installCommand\} label=\{copy[.]install[.]copyInstall\}/);
+  assert.match(source, /<CopyButton value=\{updateCommand\} label=\{copy[.]install[.]copyUpdate\}/);
+});
+
+test("introduces the local PDF and LaTeX workspace in both landing languages", async () => {
+  const home = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const copy = await readFile(new URL("../app/homeCopy.ts", import.meta.url), "utf8");
+  const showcase = await readFile(
+    new URL("../app/components/WorkspaceShowcase.tsx", import.meta.url),
+    "utf8",
+  );
+  const header = await readFile(
+    new URL("../app/components/SiteHeader.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(home, /PDF Preview/i);
+  assert.match(home, /manuscript[.]tex/i);
+  assert.match(source, /id="workspace"/);
+  assert.match(copy, /PDF 預覽/);
+  assert.match(copy, /論文工作區/);
+  assert.match(showcase, /useState<WorkspaceTab>\("pdf"\)/);
+  assert.match(showcase, /127[.]0[.]0[.]1:43127/);
+  assert.match(header, /className="language-button"/);
+  assert.match(header, /將網站切換為繁體中文/);
 });
 
 test("uses the production Workers origin for default social metadata", async () => {

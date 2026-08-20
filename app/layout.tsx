@@ -30,11 +30,13 @@ export const metadata: Metadata = {
     template: "%s — Anything-to-Journal",
   },
   description:
-    "Turn a folder of notes, data, figures, references, and source material into an editable journal manuscript and an Overleaf-ready upload.",
+    "Turn research sources into an editable LaTeX manuscript, compiled PDF, local PDF/LaTeX workspace, and Overleaf-ready upload.",
   applicationName: "Anything-to-Journal",
   keywords: [
     "journal manuscript",
     "LaTeX",
+    "PDF preview",
+    "local manuscript editor",
     "Overleaf",
     "research workflow",
     "agent skill",

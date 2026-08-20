@@ -193,10 +193,17 @@ function Introduction() {
       <Section id="what-comes-out" title="What comes out">
         <p>
           The primary handoff is a plain, editable LaTeX project plus a compiled preview
-          and a short generation report. The Overleaf copy is bundled separately so the
-          entire project can be uploaded in one step.
+          and a short generation report. When supported, the agent also starts the local
+          Manuscript Workspace: one localhost page with a scrollable PDF Preview and a
+          LaTeX editor connected to the actual generated source. The Overleaf copy remains
+          bundled separately so the entire project can be uploaded in one step.
         </p>
         <CodeBlock value={outputTree} filename="OUTPUT TREE" />
+        <Callout type="success" title="Codex and manual edits stay on one source">
+          Both routes update <code>journal-output/manuscript/manuscript.tex</code>. Saved edits
+          recompile the preview, external changes are detected, and a failed compile keeps
+          the last successful PDF visible.
+        </Callout>
         <Callout title="main.tex is already where Overleaf needs it">
           Inside <code>submission/overleaf-upload.zip</code>, <code>main.tex</code> sits at the ZIP
           root—not inside another wrapper folder.
@@ -208,7 +215,8 @@ function Introduction() {
           <li><strong>Evidence before prose.</strong> Claims should trace back to the source folder.</li>
           <li><strong>Explicit uncertainty.</strong> Missing evidence becomes a visible gap, not invented content.</li>
           <li><strong>Human-editable output.</strong> Sections, figures, and references stay in ordinary files.</li>
-          <li><strong>Portable handoff.</strong> The output works locally and can be uploaded to Overleaf.</li>
+          <li><strong>Synchronized local editing.</strong> Codex and the browser workspace share the same LaTeX source.</li>
+          <li><strong>Portable handoff.</strong> The output works in the local workspace and can still be uploaded to Overleaf.</li>
           <li><strong>Template fidelity.</strong> Journal-specific formatting is used only when supplied and confirmed.</li>
         </ul>
         <Link className="doc-next-card" href="/docs/getting-started">
@@ -276,11 +284,13 @@ function GettingStarted() {
       </Section>
 
       <Section id="review-output" title="6. Review the output">
-        <p>When generation finishes, review the report first, then open the compiled PDF. Check unresolved evidence notes before spending time on typography.</p>
+        <p>When generation finishes, review the report first, then use the local Manuscript Workspace or open the compiled PDF directly. Check unresolved evidence notes before spending time on typography.</p>
         <CodeBlock value={outputTree} filename="EXPECTED OUTPUT" />
         <ul className="check-list">
           <li>Open <code>reports/quality-report.md</code> and read every warning.</li>
-          <li>Scan <code>submission/manuscript.pdf</code> (or the clearly labeled draft PDF) for layout problems.</li>
+          <li>Use PDF Preview to scroll through the complete paper and check layout problems.</li>
+          <li>Edit the actual <code>manuscript/manuscript.tex</code> file in the LaTeX tab or continue asking Codex for changes.</li>
+          <li>Save to recompile and refresh the preview; run the existing final build and audit after the last edit.</li>
           <li>Confirm citations resolve and reference entries are complete.</li>
           <li>Upload <code>submission/overleaf-upload.zip</code> when you are ready to edit online.</li>
         </ul>
