@@ -2,7 +2,7 @@
 
 Pure frontend product and documentation site for Anything-to-Journal.
 
-The site contains no database, API routes, user accounts, analytics, or server-side application state. It is an original editorial design built with React and a Next.js static export.
+The site contains no database, API routes, user accounts, analytics, or server-side application state. It uses a quiet, one-accent product layout built with React and a Next.js static export.
 
 ## Routes
 
@@ -98,6 +98,7 @@ app/
 ├── components/          # shared landing components
 ├── docs/                # docs shell, content, and routes
 ├── globals.css          # complete visual system and responsive layout
+├── refined.css          # quiet one-rail presentation layer
 ├── layout.tsx           # metadata, fonts, and root shell
 └── page.tsx             # landing page
 public/

@@ -2,16 +2,21 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("ships the red and blue line system without the former palette", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+test("ships the quiet one-accent layout without decorative rails", async () => {
+  const css = await readFile(new URL("../app/refined.css", import.meta.url), "utf8");
   const icon = await readFile(new URL("../app/icon.svg", import.meta.url), "utf8");
+  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
 
-  assert.match(css, /--accent:\s*#df1736/i);
-  assert.match(css, /--blue:\s*#1257d6/i);
-  assert.match(css, /border-(?:top|right|bottom|left):\s*2px solid var\(--(?:accent|blue(?:-bright)?)\)/i);
-  assert.doesNotMatch(css, /#f4f0e7|#c3312f|linear-gradient|radial-gradient/i);
-  assert.match(icon, /stroke="#1768ff"/i);
-  assert.match(icon, /stroke="#f5223f"/i);
+  assert.match(layout, /import "[.]\/globals[.]css";\s*import "[.]\/refined[.]css";/);
+  assert.match(css, /--accent:\s*#e5484d/i);
+  assert.match(css, /--blue:\s*#e5484d/i);
+  assert.match(css, /[.]rail-label\s*\{\s*display:\s*none/);
+  assert.match(css, /[.]site-header::before,[\s\S]*?[.]final-cta::after\s*\{\s*display:\s*none/);
+  assert.match(css, /[.]shell-grid,[\s\S]*?[.]site-footer\s*\{[\s\S]*?border-right:\s*0;[\s\S]*?border-left:\s*0;/);
+  assert.match(css, /background-image:\s*radial-gradient/);
+  assert.match(icon, /fill="#171717"/i);
+  assert.match(icon, /fill="#e5484d"/i);
+  assert.doesNotMatch(icon, /#1768ff|#f5223f|#1257d6/i);
 });
 
 test("keeps the social preview at the required Open Graph size", async () => {
@@ -22,11 +27,11 @@ test("keeps the social preview at the required Open Graph size", async () => {
   assert.equal(png.readUInt32BE(20), 630);
 });
 
-test("aligns the documentation frame with the shared header rails", async () => {
-  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+test("aligns documentation and marketing content on one shared rail", async () => {
+  const css = await readFile(new URL("../app/refined.css", import.meta.url), "utf8");
   const headerWidth = css.match(/[.]header-inner\s*\{[\s\S]*?width:\s*([^;]+);/)?.[1];
   const docsWidth = css.match(/[.]docs-frame\s*\{[\s\S]*?width:\s*([^;]+);/)?.[1];
 
-  assert.equal(headerWidth, "min(100%, 1460px)");
+  assert.equal(headerWidth, "min(calc(100% - 40px), 1180px)");
   assert.equal(docsWidth, headerWidth);
 });
