@@ -523,3 +523,14 @@ body { background: var(--bg); }
   .doc-article { padding-right: 8px; padding-left: 8px; }
   .not-found-content { width: calc(100% - 24px); padding: 64px 12px; }
 }
+
+
+/* Keep anchor movement native; one fixed header offset also applies to deep links. */
+.desktop-nav > a[aria-current="location"],
+.mobile-nav > a[aria-current="location"] { background: var(--paper-2); color: var(--ink); }
+.mobile-nav { position: absolute; top: 100%; right: 0; left: 0; max-height: calc(100dvh - 68px); overflow-y: auto; }
+.release-link { display: inline-flex; gap: 10px; align-items: center; width: fit-content; max-width: 100%; margin-top: 28px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.release-link span { color: var(--accent); }
+.release-link:hover { color: var(--ink); }
+.workspace-intro > .workspace-release { margin: 16px 0; color: var(--accent); font-family: var(--font-mono), monospace; font-size: 12px; }
+.workspace-intro > .workspace-evidence-note { margin-top: 20px; font-size: 13px; line-height: 1.65; }

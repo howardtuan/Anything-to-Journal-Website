@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { HomeAnchor } from "./components/HomeAnchor";
 import { HomeDemo } from "./components/HomeDemo";
 import { InstallSwitcher } from "./components/InstallSwitcher";
 import { useLanguage } from "./components/LanguageProvider";
@@ -31,6 +32,7 @@ export default function Home() {
               <Link className="text-link" href="/docs">{copy.hero.secondary} <span>→</span></Link>
             </div>
           </div>
+          <HomeAnchor className="release-link" section="workspace">{copy.hero.release} <span aria-hidden="true">→</span></HomeAnchor>
           <div className="proof-marks" aria-hidden="true"><span>01</span><i /><span>{copy.hero.proof}</span></div>
         </div>
         <div className="rail-label rail-right" aria-hidden="true">{copy.hero.rightRail}</div>
@@ -91,6 +93,20 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="workspace-section section-rule" id="workspace">
+        <div className="workspace-intro">
+          <span className="section-index">{copy.workspace.index}</span>
+          <p className="workspace-release">{copy.workspace.release}</p>
+          <h2>{copy.workspace.title}</h2><p>{copy.workspace.intro}</p>
+          <ul className="workspace-points">{copy.workspace.points.map((point) => <li key={point}>{point}</li>)}</ul>
+          <p className="workspace-evidence-note">{copy.workspace.evidenceNote}</p>
+          <Link className="workspace-guide-link" href="/docs/source-references">{copy.workspace.guide}</Link>
+          <div className="workspace-routes"><span>{copy.workspace.chat}</span><span>{copy.workspace.browser}</span></div>
+          <p className="workspace-local-note"><span className="green-dot" />{copy.workspace.localOnly}</p>
+        </div>
+        <WorkspaceShowcase language={language} />
+      </section>
+
       <section className="output-section section-rule" id="output">
         <div className="output-copy">
           <span className="section-index">{copy.output.index}</span><h2>{copy.output.title}</h2><p>{copy.output.intro}</p>
@@ -114,17 +130,6 @@ export default function Home() {
           </div>
           <div className="anatomy-callout"><span>{copy.output.overleafRoute}</span><strong>{copy.output.overleafAction}</strong><p>{copy.output.overleafBody}</p></div>
         </div>
-      </section>
-
-      <section className="workspace-section section-rule" id="workspace">
-        <div className="workspace-intro">
-          <span className="section-index">{copy.workspace.index}</span>
-          <h2>{copy.workspace.title}</h2><p>{copy.workspace.intro}</p>
-          <ul className="workspace-points">{copy.workspace.points.map((point) => <li key={point}>{point}</li>)}</ul>
-          <div className="workspace-routes"><span>{copy.workspace.chat}</span><span>{copy.workspace.browser}</span></div>
-          <p className="workspace-local-note"><span className="green-dot" />{copy.workspace.localOnly}</p>
-        </div>
-        <WorkspaceShowcase language={language} />
       </section>
 
       <section className="overleaf-band">

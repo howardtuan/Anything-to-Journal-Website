@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { HomeLanguage } from "../homeCopy";
 
-const installCommand = "npx anything-to-journal@latest install";
-const updateCommand = "npx anything-to-journal@latest update";
+const installCommand = "npx --yes anything-to-journal@latest install";
+const updateCommand = "npx --yes anything-to-journal@latest update";
 
 type Audience = "you" | "agent";
 type CopyTarget = "install" | "update" | "prompt";

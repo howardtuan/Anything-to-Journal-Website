@@ -25,6 +25,7 @@ const requiredFiles = [
   "docs/getting-started/index.html",
   "docs/folder-contract/index.html",
   "docs/templates/index.html",
+  "docs/source-references/index.html",
   "docs/overleaf/index.html",
   "docs/troubleshooting/index.html",
 ];

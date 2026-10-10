@@ -73,11 +73,25 @@ export const docsPages: DocPageInfo[] = [
     keywords: ["draft", "template", "journal", "class", "sty", "author guide", "mode", "草稿", "模板", "期刊"],
   },
   {
+    href: "/docs/source-references",
+    title: "PDF source references",
+    description: "Trace recorded terms, values, and figure or table captions to highlighted source evidence.",
+    group: "Edit & submit",
+    index: "04",
+    headings: [
+      { id: "follow-a-reference", label: "Follow a claim to its source" },
+      { id: "source-locations", label: "Source locations" },
+      { id: "record-evidence", label: "Keep references useful" },
+      { id: "unresolved-references", label: "Missing and ambiguous locations" },
+    ],
+    keywords: ["provenance", "source", "reference nodes", "highlight", "accuracy", "0.9", "evidence-map", "page", "line", "region", "來源", "參考資訊", "螢光", "追溯", "準確率"],
+  },
+  {
     href: "/docs/overleaf",
     title: "Upload to Overleaf",
     description: "Upload the generated project ZIP and continue editing immediately.",
     group: "Edit & submit",
-    index: "04",
+    index: "05",
     headings: [
       { id: "upload-bundle", label: "The upload bundle" },
       { id: "upload-steps", label: "Upload in three steps" },
@@ -92,7 +106,7 @@ export const docsPages: DocPageInfo[] = [
     title: "Troubleshooting",
     description: "Fix upload, compile, citation, figure, and evidence issues.",
     group: "Reference",
-    index: "05",
+    index: "06",
     headings: [
       { id: "upload-problems", label: "Upload problems" },
       { id: "compile-problems", label: "Compile problems" },
@@ -167,11 +181,25 @@ export const zhDocsPages: DocPageInfo[] = [
     keywords: ["草稿", "模板", "期刊", "class", "sty", "作者指南", "模式", "draft", "template", "journal"],
   },
   {
+    href: "/docs/source-references",
+    title: "PDF 參考資訊",
+    description: "從已記錄的名詞、數值與圖表說明，追溯至螢光標示的來源證據。",
+    group: "編輯與投稿",
+    index: "04",
+    headings: [
+      { id: "follow-a-reference", label: "從論述回到來源" },
+      { id: "source-locations", label: "來源位置" },
+      { id: "record-evidence", label: "維護參考資訊" },
+      { id: "unresolved-references", label: "缺漏與不明確的位置" },
+    ],
+    keywords: ["來源", "參考資訊", "節點", "螢光", "追溯", "準確率", "0.9", "名詞", "數值", "圖表", "頁碼", "行號", "evidence-map", "provenance", "highlight"],
+  },
+  {
     href: "/docs/overleaf",
     title: "上傳至 Overleaf",
     description: "上傳產生的專案 ZIP，立即繼續編輯。",
     group: "編輯與投稿",
-    index: "04",
+    index: "05",
     headings: [
       { id: "upload-bundle", label: "上傳套件" },
       { id: "upload-steps", label: "三步驟上傳" },
@@ -186,7 +214,7 @@ export const zhDocsPages: DocPageInfo[] = [
     title: "疑難排解",
     description: "解決上傳、編譯、引用、圖片與證據問題。",
     group: "參考",
-    index: "05",
+    index: "06",
     headings: [
       { id: "upload-problems", label: "上傳問題" },
       { id: "compile-problems", label: "編譯問題" },

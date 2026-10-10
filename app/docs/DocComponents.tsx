@@ -33,7 +33,7 @@ export function ArticleFrame({ slug, children }: { slug: string; children: React
       </header>
       <div className="doc-status-row">
         <span><i className="green-dot" /> {zh ? "已建立文件" : "DOCUMENTED"}</span>
-        <span>{zh ? "更新於 2026 年 8 月" : "UPDATED AUG 2026"}</span>
+        <span>{zh ? "更新於 2026 年 9 月" : "UPDATED SEP 2026"}</span>
       </div>
 
       <div className="doc-prose">{children}</div>

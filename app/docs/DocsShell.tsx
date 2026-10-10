@@ -62,7 +62,7 @@ export function DocsShell({ children }: { children: ReactNode }) {
         <aside className="docs-sidebar" aria-label={zh ? "文件導覽" : "Documentation navigation"}>
           <div className="sidebar-version">
             <span>{zh ? "文件" : "DOCUMENTATION"}</span>
-            <em>v1.0</em>
+            <em>v1.2</em>
           </div>
           {docsGroups.map((group) => (
             <div className="sidebar-group" key={group}>

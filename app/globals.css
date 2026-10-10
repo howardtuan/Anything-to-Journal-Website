@@ -69,7 +69,6 @@
 
 html {
   width: 100%;
-  scroll-behavior: smooth;
   scroll-padding-top: 92px;
 }
 
@@ -1585,6 +1584,7 @@ html[lang="zh-TW"] .hero-title {
 .workspace-tabs button.active span { color: var(--demo-blue); }
 
 .workspace-stage {
+  position: relative;
   height: 520px;
   background: #181819;
   overflow: hidden;
@@ -1622,6 +1622,28 @@ html[lang="zh-TW"] .hero-title {
 .fake-columns i:nth-child(3n) { width: 88%; }
 .fake-columns i:nth-child(5n) { width: 72%; }
 .fake-page-number { position: absolute; right: 0; bottom: 20px; left: 0; color: #85857f; font-family: var(--font-mono), monospace; font-size: 7px; text-align: center; }
+
+.workspace-demo-hint { padding: 10px 14px; border-bottom: 1px solid var(--demo-line); color: var(--demo-muted); font-family: var(--font-mono), monospace; font-size: 9px; }
+.fake-pdf-page.fake-provenance-page { width: min(92%, 450px); padding: 28px 30px; }
+.fake-provenance-page h3 { margin-top: 18px; }
+.fake-provenance-page .fake-authors { margin-bottom: 20px; }
+.fake-finding { font-family: Georgia, serif; font-size: 12px; line-height: 1.6; }
+.fake-finding > strong { font-size: 13px; }
+.fake-finding p { margin: 10px 0; }
+.reference-node { display: inline-flex; align-items: center; min-height: 30px; margin-left: 6px; padding: 3px 7px; border: 1px solid #cf5c08; border-radius: 3px; background: #fff2dc; color: #8a3900; cursor: pointer; font-family: var(--font-mono), monospace; font-size: 10px; vertical-align: middle; }
+.reference-node:hover, .reference-node[aria-expanded="true"] { background: #ffdbab; }
+.workspace-source-panel { position: absolute; right: 12px; bottom: 12px; left: 12px; max-height: 270px; padding: 14px; border: 1px solid var(--demo-red); background: var(--demo-panel); box-shadow: 0 5px 28px #0008; overflow-y: auto; }
+.source-panel-heading { display: flex; gap: 12px; align-items: center; justify-content: space-between; font-family: var(--font-mono), monospace; font-size: 10px; }
+.source-panel-heading > button { flex-shrink: 0; width: 28px; height: 28px; border: 1px solid var(--demo-line); background: transparent; color: var(--demo-ink); cursor: pointer; font-size: 20px; }
+.source-selector { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+.source-selector button { min-height: 30px; padding: 4px 8px; border: 1px solid var(--demo-line); background: transparent; color: var(--demo-muted); cursor: pointer; font-family: var(--font-mono), monospace; font-size: 9px; }
+.source-selector button[aria-pressed="true"] { border-color: var(--demo-red); color: var(--demo-red); }
+.source-excerpt { padding: 12px; background: #fffdf6; color: #24231f; }
+.source-locator { display: block; color: #656159; font-family: var(--font-mono), monospace; font-size: 9px; overflow-wrap: anywhere; }
+.source-excerpt p, .source-excerpt pre { margin: 8px 0 0; font-size: 12px; line-height: 1.65; white-space: pre-wrap; }
+.source-excerpt mark { background: #ffe56c; color: #24231f; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.source-demo-note { margin: 9px 0 0; color: var(--demo-muted); font-size: 9px; }
+.workspace-guide-link { display: inline-block; margin-top: 24px; color: var(--accent); font-size: 13px; }
 
 .workspace-code {
   position: relative;
@@ -2105,6 +2127,10 @@ html[lang="zh-TW"] .hero-title {
   .workspace-pdf-scroll { padding: 18px 10px; }
   .fake-pdf-page { width: 92%; min-height: 500px; padding: 38px 28px; }
   .fake-pdf-page.compact { min-height: 430px; }
+  .fake-pdf-page.fake-provenance-page { padding: 20px; }
+  .fake-provenance-page h3 { margin-top: 12px; font-size: 20px; }
+  .fake-provenance-page .fake-authors { margin-bottom: 12px; }
+  .fake-provenance-page .fake-finding { font-size: 11px; }
   .workspace-status-bar { gap: 8px; font-size: 6px; }
   .overleaf-band { padding: 76px 22px; }
   .overleaf-band .button { width: 100%; }

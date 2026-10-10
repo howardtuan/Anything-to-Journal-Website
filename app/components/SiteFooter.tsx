@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HomeAnchor } from "./HomeAnchor";
 import type { HomeLanguage } from "../homeCopy";
 
 export function SiteFooter({ language }: { language: HomeLanguage }) {
@@ -26,7 +27,7 @@ export function SiteFooter({ language }: { language: HomeLanguage }) {
       </div>
       <div className="footer-bottom">
         <span>{zh ? "為 AGENT 工作流程而生" : "BUILT FOR AGENT WORKFLOWS"}</span>
-        <a href="#top">{zh ? "回到頂端 ↑" : "BACK TO TOP ↑"}</a>
+        <HomeAnchor section="top">{zh ? "回到頂端 ↑" : "BACK TO TOP ↑"}</HomeAnchor>
       </div>
     </footer>
   );

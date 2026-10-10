@@ -11,18 +11,25 @@ The site contains no database, API routes, user accounts, analytics, or server-s
 - `/docs/getting-started` — fresh-folder workflow;
 - `/docs/folder-contract` — accepted inputs and output anatomy;
 - `/docs/templates` — generic draft versus target venue;
+- `/docs/source-references` — PDF reference nodes, source highlighting, and unresolved evidence;
 - `/docs/overleaf` — exact upload and editing guide;
 - `/docs/troubleshooting` — common blockers and recovery.
 
 The frontend includes responsive navigation, dark mode persisted in `localStorage`, a site-wide English / Traditional Chinese switch, a `For you / For your agent` install switcher, a mobile docs browser, Cmd/Ctrl+K bilingual client-side search, copy buttons, interactive source and Manuscript Workspace demos, and accessible FAQ accordions.
 
+Homepage order is Install → Source folder → Workflow → Mode choice → Manuscript Workspace → Output → Overleaf → FAQ. Desktop and mobile section links share the same order; same-page links use instant positioning and retain deep links, preserve router history across docs routes, and restore the selected anchor on Back/Forward. The current-section indicator follows scrolling without changing the URL.
+
 The landing page now explains the complete post-generation workflow: the Agent produces LaTeX, PDF, references, audit, and submission files; then the user can open the local-only Manuscript Workspace, switch between PDF Preview and LaTeX, continue editing through Codex chat or by hand, and still use the existing Overleaf ZIP handoff. The language preference is stored locally under `atj-language` and remains active across the landing page and every documentation route.
+
+New in **v1.2.0**: PDF evidence links, source previews, yellow highlights, multiple-source switching, and locally bundled PDF.js. Precise highlights require recorded source locations; scanned PDFs need recorded regions and there is no automatic OCR. PDF compilation needs Tectonic or TeX Live with XeLaTeX or LuaLaTeX. Open a prepared project with `python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output`.
+
+The workspace showcase includes an interactive source-reference example: click the node beside accuracy **0.9**, switch between a sample PDF and CSV, and see the exact file location and yellow-highlighted passage. English and Traditional Chinese documentation explain references for recorded terms, values, and figure/table captions; multiple sources per claim; and missing or ambiguous locators. Reference nodes use recorded evidence and do not imply automatic factual verification. Existing evidence maps can be enriched with precise locations. The website demo uses illustrative data and does not read local research files.
 
 The landing page and Getting Started guide expose the npm CLI used to install and update the Agent Skill:
 
 ```bash
-npx anything-to-journal@latest install
-npx anything-to-journal@latest update
+npx --yes anything-to-journal@latest install
+npx --yes anything-to-journal@latest update
 ```
 
 These commands require Node.js 18 or newer and use the matching `anything-to-journal` version available from npm.

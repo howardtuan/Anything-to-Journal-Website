@@ -9,8 +9,8 @@ const firstPromptZh = `在這個資料夾使用 Anything-to-Journal Skill。
 2. 特定期刊模板。
 等我回答後，再讀取並分類所有來源資料。`;
 
-const installCommand = "npx anything-to-journal@latest install";
-const updateCommand = "npx anything-to-journal@latest update";
+const installCommand = "npx --yes anything-to-journal@latest install";
+const updateCommand = "npx --yes anything-to-journal@latest update";
 
 const sourceTreeZh = `my-research/
 ├── README.md
@@ -115,6 +115,8 @@ function IntroductionZh() {
           在支援的環境中，Agent 也會啟動本機 Manuscript Workspace：同一個 localhost 頁面包含可捲動的 PDF 預覽，
           以及直接連接實際來源檔的 LaTeX 編輯器。Overleaf 版本會另外封裝，讓你能一步上傳完整專案。
         </p>
+        <p>已準備好 journal-output 後，可用以下指令開啟本機工作區（請換成實際輸出路徑）。編譯 PDF 需要 Tectonic 或含 XeLaTeX／LuaLaTeX 的 TeX Live。</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="終端機 / 本機工作區" />
         <CodeBlock value={outputTreeZh} filename="輸出結構" />
         <Callout type="success" title="Codex 與手動編輯共用同一份來源">
           兩種方式都會更新 <code>journal-output/manuscript/manuscript.tex</code>。儲存後會重新編譯預覽，
@@ -169,7 +171,7 @@ function GettingStartedZh() {
         <h3>日後更新</h3>
         <p>使用 <code>@latest</code> 取得最新 npm 版本。更新程式會先驗證既有 Skill、暫存替換內容，再以不可分割的方式完成交換。</p>
         <CodeBlock value={updateCommand} filename="終端機 / 更新" />
-        <p>若要安裝到特定 repository，請加上 <code>--repo /absolute/path/to/repository</code>。執行 <code>npx anything-to-journal@latest --help</code> 可查看明確的目標與 dry-run 選項。</p>
+        <p>若要安裝到特定 repository，請加上 <code>--repo /absolute/path/to/repository</code>。執行 <code>npx --yes anything-to-journal@latest --help</code> 可查看明確的目標與 dry-run 選項。</p>
       </Section>
 
       <Section id="create-workspace" title="2. 建立工作區">
@@ -199,10 +201,13 @@ function GettingStartedZh() {
 
       <Section id="review-output" title="6. 檢查輸出">
         <p>產生完成後，請先閱讀報告，再使用本機 Manuscript Workspace 或直接開啟編譯後的 PDF。先處理尚未解決的證據備註，再花時間調整版面。</p>
+        <p>已準備好 journal-output 後，可用以下指令開啟本機工作區（請換成實際輸出路徑）。編譯 PDF 需要 Tectonic 或含 XeLaTeX／LuaLaTeX 的 TeX Live。</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="終端機 / 本機工作區" />
         <CodeBlock value={outputTreeZh} filename="預期輸出" />
         <ul className="check-list">
           <li>開啟 <code>reports/quality-report.md</code> 並閱讀每一項警告。</li>
           <li>在 PDF 預覽中捲動閱讀完整論文，檢查版面問題。</li>
+          <li>點擊已記錄論述旁的<Link href="/docs/source-references">參考資訊節點</Link>，檢查來源檔案與螢光標示的證據，並處理缺漏或不明確的位置。</li>
           <li>在 LaTeX 分頁編輯實際的 <code>manuscript/manuscript.tex</code>，或繼續請 Codex 修改。</li>
           <li>儲存以重新編譯並更新預覽；最後一次修改後，再執行既有的正式 build 與 audit。</li>
           <li>確認所有引用都能解析，且參考文獻資料完整。</li>
@@ -335,6 +340,8 @@ function OverleafZh() {
       </p>
 
       <Section id="upload-bundle" title="上傳套件">
+        <p>已準備好 journal-output 後，可用以下指令開啟本機工作區（請換成實際輸出路徑）。編譯 PDF 需要 Tectonic 或含 XeLaTeX／LuaLaTeX 的 TeX Live。</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="終端機 / 本機工作區" />
         <CodeBlock value={outputTreeZh} filename="產生的交付內容" />
         <Callout type="success" title="上傳 submission/overleaf-upload.zip">
           你只需要傳送這個檔案。壓縮檔根目錄包含 <code>main.tex</code>，並附上論文所需的參考文獻、

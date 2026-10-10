@@ -9,13 +9,14 @@ const routeFiles = new Map([
   ["/docs/getting-started", "../out/docs/getting-started/index.html"],
   ["/docs/folder-contract", "../out/docs/folder-contract/index.html"],
   ["/docs/templates", "../out/docs/templates/index.html"],
+  ["/docs/source-references", "../out/docs/source-references/index.html"],
   ["/docs/overleaf", "../out/docs/overleaf/index.html"],
   ["/docs/troubleshooting", "../out/docs/troubleshooting/index.html"],
 ]);
 const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
 const productionUrl = "https://anything-to-journal-website.howardtuan.workers.dev/";
-const installCommand = "npx anything-to-journal@latest install";
-const updateCommand = "npx anything-to-journal@latest update";
+const installCommand = "npx --yes anything-to-journal@latest install";
+const updateCommand = "npx --yes anything-to-journal@latest update";
 
 test("exports complete HTML for every public route", async () => {
   for (const [route, relative] of routeFiles) {

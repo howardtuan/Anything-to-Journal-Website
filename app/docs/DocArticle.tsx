@@ -11,8 +11,8 @@ Before opening any source content, ask me whether I want:
 2. a specific journal template.
 After I answer, read and classify every source material.`;
 
-const installCommand = "npx anything-to-journal@latest install";
-const updateCommand = "npx anything-to-journal@latest update";
+const installCommand = "npx --yes anything-to-journal@latest install";
+const updateCommand = "npx --yes anything-to-journal@latest update";
 
 const sourceTree = `my-research/
 ├── README.md
@@ -126,6 +126,8 @@ function Introduction() {
           LaTeX editor connected to the actual generated source. The Overleaf copy remains
           bundled separately so the entire project can be uploaded in one step.
         </p>
+        <p>Once journal-output is prepared, open the local workspace with this command, replacing the output path. PDF compilation requires Tectonic or TeX Live with XeLaTeX or LuaLaTeX.</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="TERMINAL / LOCAL WORKSPACE" />
         <CodeBlock value={outputTree} filename="OUTPUT TREE" />
         <Callout type="success" title="Codex and manual edits stay on one source">
           Both routes update <code>journal-output/manuscript/manuscript.tex</code>. Saved edits
@@ -183,7 +185,7 @@ function GettingStarted() {
         <h3>Update later</h3>
         <p>Use <code>@latest</code> to fetch the newest npm release. The updater verifies the installed skill, stages the replacement, and swaps it into place atomically.</p>
         <CodeBlock value={updateCommand} filename="TERMINAL / UPDATE" />
-        <p>For a repository-local installation, append <code>--repo /absolute/path/to/repository</code>. Run <code>npx anything-to-journal@latest --help</code> for explicit destination and dry-run options.</p>
+        <p>For a repository-local installation, append <code>--repo /absolute/path/to/repository</code>. Run <code>npx --yes anything-to-journal@latest --help</code> for explicit destination and dry-run options.</p>
       </Section>
 
       <Section id="create-workspace" title="2. Create the workspace">
@@ -213,10 +215,13 @@ function GettingStarted() {
 
       <Section id="review-output" title="6. Review the output">
         <p>When generation finishes, review the report first, then use the local Manuscript Workspace or open the compiled PDF directly. Check unresolved evidence notes before spending time on typography.</p>
+        <p>Once journal-output is prepared, open the local workspace with this command, replacing the output path. PDF compilation requires Tectonic or TeX Live with XeLaTeX or LuaLaTeX.</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="TERMINAL / LOCAL WORKSPACE" />
         <CodeBlock value={outputTree} filename="EXPECTED OUTPUT" />
         <ul className="check-list">
           <li>Open <code>reports/quality-report.md</code> and read every warning.</li>
           <li>Use PDF Preview to scroll through the complete paper and check layout problems.</li>
+          <li>Open <Link href="/docs/source-references">source reference nodes</Link> beside recorded findings to review source files and highlighted evidence; resolve missing or ambiguous locations.</li>
           <li>Edit the actual <code>manuscript/manuscript.tex</code> file in the LaTeX tab or continue asking Codex for changes.</li>
           <li>Save to recompile and refresh the preview; run the existing final build and audit after the last edit.</li>
           <li>Confirm citations resolve and reference entries are complete.</li>
@@ -355,6 +360,8 @@ function Overleaf() {
       </p>
 
       <Section id="upload-bundle" title="The upload bundle">
+        <p>Once journal-output is prepared, open the local workspace with this command, replacing the output path. PDF compilation requires Tectonic or TeX Live with XeLaTeX or LuaLaTeX.</p>
+        <CodeBlock value="python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output" filename="TERMINAL / LOCAL WORKSPACE" />
         <CodeBlock value={outputTree} filename="GENERATED DELIVERABLE" />
         <Callout type="success" title="Upload submission/overleaf-upload.zip">
           This is the only file you need to transfer. The archive contains

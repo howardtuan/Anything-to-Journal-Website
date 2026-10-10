@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cancelHomeAnchorRestoration, HomeAnchor, restoreHomeAnchorFromHistory } from "./HomeAnchor";
 import { useLanguage } from "./LanguageProvider";
 
 type SiteHeaderProps = {
@@ -11,11 +12,22 @@ type SiteHeaderProps = {
   onSearch?: () => void;
 };
 
+const homeSections = [
+  { id: "workflow", en: "Workflow", zh: "流程" },
+  { id: "workspace", en: "Workspace", zh: "論文工作區" },
+  { id: "output", en: "Output", zh: "輸出" },
+  { id: "faq", en: "FAQ", zh: "問答" },
+] as const;
+
 const githubUrl = "https://github.com/howardtuan/Anything-to-Journal";
 const githubLabel = "View Anything-to-Journal on GitHub (opens in a new tab)";
 
 export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const home = !docs && !minimal;
   const [dark, setDark] = useState(false);
   const { language, toggleLanguage } = useLanguage();
   const zh = language === "zh-TW";
@@ -29,6 +41,71 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
+  // Scrollspy never writes history. Link keeps anchor entries in the router history.
+  useEffect(() => {
+    if (!home) return;
+    let frame = 0;
+    function updateSection() {
+      frame = 0;
+      const readingLine = (headerRef.current?.offsetHeight ?? 68) + 28;
+      let current: string | null = null;
+      for (const section of homeSections) {
+        if ((document.getElementById(section.id)?.getBoundingClientRect().top ?? Infinity) <= readingLine) {
+          current = section.id;
+        }
+      }
+      setActiveSection(current);
+    }
+    function scheduleUpdate() {
+      if (!frame) frame = window.requestAnimationFrame(updateSection);
+    }
+    function restoreHistoryAnchor() {
+      scheduleUpdate();
+      restoreHomeAnchorFromHistory();
+    }
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("hashchange", scheduleUpdate);
+    window.addEventListener("popstate", restoreHistoryAnchor);
+    const observer = new ResizeObserver(scheduleUpdate);
+    const main = document.getElementById("top");
+    if (main) observer.observe(main);
+    scheduleUpdate();
+    return () => {
+      window.cancelAnimationFrame(frame);
+      cancelHomeAnchorRestoration();
+      observer.disconnect();
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("hashchange", scheduleUpdate);
+      window.removeEventListener("popstate", restoreHistoryAnchor);
+    };
+  }, [home]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButton.current?.focus({ preventScroll: true });
+    }
+    function onOutsideClick(event: PointerEvent) {
+      if (!headerRef.current?.contains(event.target as Node)) setMenuOpen(false);
+    }
+    const desktop = window.matchMedia("(min-width: 861px)");
+    function onDesktop() {
+      if (desktop.matches) setMenuOpen(false);
+    }
+    window.addEventListener("keydown", onEscape);
+    window.addEventListener("pointerdown", onOutsideClick);
+    desktop.addEventListener("change", onDesktop);
+    return () => {
+      window.removeEventListener("keydown", onEscape);
+      window.removeEventListener("pointerdown", onOutsideClick);
+      desktop.removeEventListener("change", onDesktop);
+    };
+  }, [menuOpen]);
+
   function toggleTheme() {
     const nextDark = !dark;
     setDark(nextDark);
@@ -37,7 +114,7 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
   }
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <div className="header-inner">
         <Link className="brand" href="/" aria-label={zh ? "Anything-to-Journal 首頁" : "Anything-to-Journal home"}>
           <span className="brand-mark" aria-hidden="true">
@@ -62,10 +139,11 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
             </>
           ) : (
             <>
-              <a href="#workflow">{zh ? "流程" : "Workflow"}</a>
-              <a href="#workspace">{zh ? "論文工作區" : "Workspace"}</a>
-              <a href="#output">{zh ? "輸出" : "Output"}</a>
-              <a href="#faq">{zh ? "問答" : "FAQ"}</a>
+              {homeSections.map((section) => (
+                <HomeAnchor key={section.id} section={section.id} aria-current={activeSection === section.id ? "location" : undefined}>
+                  {zh ? section.zh : section.en}
+                </HomeAnchor>
+              ))}
               <Link href="/docs">{zh ? "文件" : "Docs"}</Link>
             </>
           )}
@@ -132,7 +210,9 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
           </button>
           <button
             className="menu-button"
+            ref={menuButton}
             type="button"
+            aria-controls={menuOpen ? "mobile-navigation" : undefined}
             aria-expanded={menuOpen}
             aria-label={zh ? "切換導覽選單" : "Toggle navigation"}
             onClick={() => setMenuOpen((value) => !value)}
@@ -144,10 +224,15 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
       </div>
 
       {menuOpen && (
-        <nav className="mobile-nav" aria-label={zh ? "行動版導覽" : "Mobile navigation"}>
+        <nav id="mobile-navigation" className="mobile-nav" aria-label={zh ? "行動版導覽" : "Mobile navigation"}>
           <Link href="/" onClick={() => setMenuOpen(false)}>
             {zh ? "首頁" : "Home"}
           </Link>
+          {home && homeSections.map((section) => (
+            <HomeAnchor key={section.id} section={section.id} aria-current={activeSection === section.id ? "location" : undefined} onClick={() => setMenuOpen(false)}>
+              {zh ? section.zh : section.en}
+            </HomeAnchor>
+          ))}
           <Link href="/docs" onClick={() => setMenuOpen(false)}>
             {zh ? "文件" : "Documentation"}
           </Link>
@@ -157,16 +242,6 @@ export function SiteHeader({ docs = false, minimal = false, onSearch }: SiteHead
           <Link href="/docs/overleaf" onClick={() => setMenuOpen(false)}>
             {zh ? "Overleaf 上傳" : "Overleaf upload"}
           </Link>
-          {!docs && !minimal && (
-            <a href="#workspace" onClick={() => setMenuOpen(false)}>
-              {zh ? "論文工作區" : "Manuscript workspace"}
-            </a>
-          )}
-          {!docs && !minimal && (
-            <a href="#faq" onClick={() => setMenuOpen(false)}>
-              {zh ? "常見問題" : "FAQ"}
-            </a>
-          )}
           <a
             className="github-link"
             href={githubUrl}

@@ -6,9 +6,9 @@ Anything-to-Journal is a folder-first agent skill that turns source material int
 
 Requires Node.js 18 or newer.
 
-- Install: `npx anything-to-journal@latest install`
-- Update: `npx anything-to-journal@latest update`
-- Options: `npx anything-to-journal@latest --help`
+- Install: `npx --yes anything-to-journal@latest install`
+- Update: `npx --yes anything-to-journal@latest update`
+- Options: `npx --yes anything-to-journal@latest --help`
 
 ## Documentation
 
@@ -16,6 +16,7 @@ Requires Node.js 18 or newer.
 - /docs/getting-started — Complete first-run workflow
 - /docs/folder-contract — Source workspace contract
 - /docs/templates — Draft mode and journal-template mode
+- /docs/source-references — PDF reference nodes, highlighted sources, and unresolved evidence
 - /docs/overleaf — Upload the generated ZIP to Overleaf
 - /docs/troubleshooting — Compile, citation, figure, and evidence fixes
 
@@ -32,13 +33,19 @@ Requires Node.js 18 or newer.
 
 The generated ZIP has `main.tex` at its root.
 
-## Manuscript Workspace
+## Manuscript Workspace — v1.2.0 source references
 
-- Starts locally with `python scripts/workspace_editor.py <journal-output>`.
+- Starts locally with `python3 ~/.codex/skills/anything-to-journal/scripts/workspace_editor.py /path/to/journal-output`.
 - Binds to `127.0.0.1` and does not upload unpublished manuscripts.
 - Opens with a scrollable PDF Preview and a LaTeX tab for the real `journal-output/manuscript/manuscript.tex` file.
 - Saved edits recompile and refresh the PDF; failed compiles keep the last successful preview.
 - Detects external edits made by Codex and protects unsaved browser changes from being overwritten.
 - The same localhost URL works in Codex Desktop and a regular browser.
+- PDF reference nodes connect recorded terms, values, and figure/table captions to one or more source files.
+- Source references show file names and recorded page, line, or region locators; matching text is highlighted in yellow.
+- Missing files, unmatched quotes, and ambiguous locations remain explicit. Highlights locate evidence for human review; they do not independently verify claims.
+- Existing evidence-map.csv files remain usable and can be enriched with exact source locations. Updating the skill does not automatically map every claim in an older manuscript.
 
 The complete site includes an English / Traditional Chinese language switch. The selected language remains active across the landing page and every documentation route.
+
+PDF.js is bundled with the skill and loads locally. Precise highlights require recorded source locators; scanned PDFs need a recorded region and there is no automatic OCR. Compiling requires Tectonic or TeX Live with XeLaTeX or LuaLaTeX.
